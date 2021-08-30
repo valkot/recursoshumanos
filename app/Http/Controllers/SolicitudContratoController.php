@@ -23,6 +23,7 @@ use Auth;
 use DateTime;
 use NumberFormatter;
 use Response;
+use Session;
 
 class SolicitudContratoController extends Controller
 {
@@ -81,6 +82,8 @@ class SolicitudContratoController extends Controller
      */
     public function create()
     {
+        session_start();
+        $_SESSION['lista_prestaciones'] = null;
         $sexos = Sexo::where("bo_estado", 1)->get();
         $comunas = Comuna::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $servicios = Servicio::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
@@ -110,7 +113,7 @@ class SolicitudContratoController extends Controller
             'tx_direccion'=> request()->tx_direccion,
             'id_comuna'=> request()->id_comuna
         ];
-        $funcionario = Funcionario::updateOrCreate(['id' => $request->id_paciente], $funcionarioRequest);
+        $funcionario = Funcionario::updateOrCreate(['id' => $request->funcionario_id], $funcionarioRequest);
 
         $tipoEspecialidad = TipoEspecialidad::find(request()->id_tipo_especialidad);
         $tipoContrato = TipoContrato::find(request()->tipo_contrato_id);
@@ -173,7 +176,8 @@ class SolicitudContratoController extends Controller
             'contrato_type'=> $tipoContrato->modelo,
             'contrato_id'=> $subContrato->id
         ];
-        $solicitudContrato = SolicitudContrato::updateOrCreate(['id' => $request->id], $solicitudContratoRequest);
+
+        $solicitudContrato = SolicitudContrato::updateOrCreate(['id' => $request->id_solicitud], $solicitudContratoRequest);
 
         if($funcionario && $solicitudContratoRequest){
             return redirect('/solicitudContrato')->with('message', "La solicitud se ha ingresado correctamente");
@@ -190,7 +194,7 @@ class SolicitudContratoController extends Controller
      */
     public function show($id)
     {
-        $solicitudContrato = SolicitudContrato::with('funcionario', 'especialidad', 'contrato', 'tipoContrato')->find($id);
+        $solicitudContrato = SolicitudContrato::with('funcionario', 'usuario', 'especialidad', 'contrato', 'tipoContrato')->find($id);
         $data2 = array(
             'user' => 'hsjd',
             'key' => 'desa',
@@ -293,8 +297,17 @@ class SolicitudContratoController extends Controller
     {
         $solicitudContrato = SolicitudContrato::find($id);
         $solicitudContrato->estado_id = 2;
+        $solicitudContrato->gestor_id = Auth::id();
         $solicitudContrato->save();
         return redirect()->back()->with('message', 'La solicitud ha sido confirmada');
+    }
+
+    public function solicitudContratoAnular($id)
+    {
+        $solicitudContrato = SolicitudContrato::find($id);
+        $solicitudContrato->estado_id = 4;
+        $solicitudContrato->save();
+        return redirect()->back()->with('error', 'La solicitud ha sido anulada');
     }
 
     public function api($id)
@@ -392,5 +405,29 @@ class SolicitudContratoController extends Controller
 
         // $json = json_encode($solicitud);
         // dd($json);
+    }
+
+    public function solicitudContratoAgregarPrestacion(Request $request){
+        session_start();
+        // dd($_SESSION['lista_prestaciones']);
+        // dd($request->all());
+        if(!isset($_SESSION['lista_prestaciones'])){
+            $lista_prestaciones = array();
+            $_SESSION['lista_prestaciones'] = $lista_prestaciones;
+        }
+        $lista_prestaciones = $_SESSION['lista_prestaciones'];
+
+        if(isset($request->id_prestacion_ptmh) && isset($request->max_prestaciones_mes_ptmh)){
+            $prestacion = PrestacionFuncionario::find($request->id_prestacion_ptmh)->toArray();
+            $prestacion['max'] = $request->max_prestaciones_mes_ptmh;
+            $prestacion['total'] = $prestacion['valor'] * $request->max_prestaciones_mes_ptmh;
+            array_push($lista_prestaciones, $prestacion);
+            $_SESSION['lista_prestaciones'] = $lista_prestaciones;
+        }
+        // dd($prestacion);
+        // $lista_pacientes['error'] = 0;
+        // $lista_pacientes = $_SESSION['lista_pacientes'];
+
+        return $lista_prestaciones;
     }
 }

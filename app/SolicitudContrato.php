@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 
 class SolicitudContrato extends Model
 {
@@ -11,6 +12,23 @@ class SolicitudContrato extends Model
 
     use SoftDeletes;
     public $guarded = [];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($solicitudContrato)
+        {
+			$solicitudContrato->servicio_id = Auth::user()->servicio_id;
+            $solicitudContrato->usuario_id = Auth::id();
+        });
+          
+        static::created(function($solicitudContrato)
+        {
+			$solicitudContrato->servicio_id = Auth::user()->servicio_id;
+            $solicitudContrato->usuario_id = Auth::id();
+        });
+    }
 
     protected $appends = ['fecha_inicio', 'fecha_termino'];
 
@@ -29,6 +47,16 @@ class SolicitudContrato extends Model
     public function funcionario()
     {
 		return $this->belongsTo('App\Funcionario', 'funcionario_id');
+    }
+
+	public function usuario()
+    {
+		return $this->belongsTo('App\User', 'usuario_id');
+    }
+
+	public function gestor()
+    {
+		return $this->belongsTo('App\User', 'gestor_id');
     }
 
     public function servicio()

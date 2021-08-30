@@ -244,6 +244,7 @@ return [
         [
             'text'    => 'Administracion',
             'icon'    => 'fas fa-fw fa-cog',
+            'can'  => 'admin',
             'submenu' => [
                 [
                     'text' => 'Usuarios',
@@ -251,7 +252,7 @@ return [
                     'icon'    => 'fas fa-fw fa-user',
                 ],
                 [
-                    'text' => 'Valor Por Prestacion',
+                    'text' => 'Tarifa por Especialista',
                     'url'  => 'rango',
                     'icon'    => 'fas fa-fw fa-dollar-sign',
                 ],

@@ -54,5 +54,21 @@
             </tr>
             @include('tipoContrato.'.$solicitudContrato->tipoContrato->carpeta.'.pdf')
         </table>
+        <br>
+        <table id="tabla">
+            <tr>
+                <th colspan="3" style="background: blanchedalmond">Datos Extras</th>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <th>Solicitado por</th>
+                <th>Visado por</th>
+            </tr>
+            <tr>
+                <td style="background: {{$solicitudContrato->estado->color}}">{{$solicitudContrato->estado->nombre}}</td>
+                <td>{{$solicitudContrato->usuario->name}}</td>
+                <td>{{$solicitudContrato->gestor->name ?? ''}}</td>
+            </tr>
+        </table>
     </body>
 </html>

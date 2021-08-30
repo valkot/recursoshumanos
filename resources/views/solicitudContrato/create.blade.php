@@ -7,7 +7,9 @@
     <div class="card">
         <form role="form" class="form-horizontal" id="form" method="POST" action="{{action('SolicitudContratoController@store')}}">
             {{ csrf_field() }}
-            <input type="hidden" id="id_paciente" name="id_paciente" value="{{$solicitudContrato->id ?? ''}}"/>
+            <input type="hidden" id="funcionario_id" name="funcionario_id" value="{{$solicitudContrato->funcionario_id ?? ''}}"/>
+            <input type="hidden" id="id_solicitud" name="id_solicitud" value="{{$solicitudContrato->id ?? ''}}"/>
+            <input type="hidden" id="id_contrato" name="id_contrato" value="{{$solicitudContrato->contrato->id ?? ''}}"/>
             <input type="hidden" id="id_tipo_especialidad" name="id_tipo_especialidad"/>
             <input type="hidden" id="especialidad_id" name="especialidad_id"/>
             <div class="card-header">
@@ -78,10 +80,10 @@
                         </div>
                         <div class="col-sm-3">
                             <label for="servicio_id">Servicio<span style="color:#FF0000";>*</span></label>
-                            <select class="form-control" id="servicio_id" name="servicio_id" onclick="asignarValor();" required>
+                            <select class="form-control" id="servicio_id" name="servicio_id" onclick="asignarValor();" {{Auth::user()->perfil_id == 4 ? 'disabled' : ''}} required>
                                 <option value="">Seleccione Servicio</option>
                                 @foreach ($servicios as $servicio)
-                                    <option value={{$servicio->id}} {{isset($solicitudContrato) && $solicitudContrato->servicio_id == $servicio->id ? "selected" : ""}}>{{$servicio->tx_descripcion}}</option>								
+                                    <option value={{$servicio->id}} {{(isset($solicitudContrato) && $solicitudContrato->servicio_id == $servicio->id) || (Auth::user()->perfil_id == 4 && Auth::user()->servicio_id == $servicio->id) ? "selected" : ""}}>{{$servicio->tx_descripcion}}</option>								
                                 @endforeach
                             </select>
                         </div>
@@ -323,7 +325,7 @@
         // Programa 500 Especialista
         function valorPrestacionPqe(){
             var id_prestacion_pqe = document.getElementById("id_prestacion_pqe").value;
-            $.getJSON("{{action('GetController@getValorPrestacion')}}?id_prestacion_pqe="+id_prestacion_pqe,
+            $.getJSON("{{action('GetController@getValorPrestacion')}}?id_prestacion="+id_prestacion_pqe,
                 function(data){
                     $("#valor_prestacion_pqe").val(data.valor);
                     calcularMaxPrestaPeriodoPqe();
@@ -363,6 +365,54 @@
         //     var id_prestacion_pqe = document.getElementById("id_prestacion_ptmh").value;
         //     console.log(id_prestacion_pqe);
         // }
+        function valorPrestacionPtmh(){
+            var id_prestacion_ptmh = document.getElementById("id_prestacion_ptmh").value;
+            $.getJSON("{{action('GetController@getValorPrestacion')}}?id_prestacion="+id_prestacion_ptmh,
+                function(data){
+                    $("#valor_prestacion_ptmh").val(data.valor);
+                    // calcularMaxPrestaPeriodoPqe();
+                }
+            )
+        }
+
+        function agregarPrestacionPtmh(params) {
+            var id_prestacion_ptmh = document.getElementById("id_prestacion_ptmh").value;
+            var valor_prestacion_ptmh = document.getElementById("valor_prestacion_ptmh").value;
+            var max_prestaciones_mes_ptmh = document.getElementById("max_prestaciones_mes_ptmh").value;
+            if(id_prestacion_ptmh == '' || valor_prestacion_ptmh == '' || max_prestaciones_mes_ptmh == ''){
+                alert('Debe completar todos los datos');
+            }else{
+                $.getJSON("{{action('SolicitudContratoController@solicitudContratoAgregarPrestacion')}}?id_prestacion_ptmh="+id_prestacion_ptmh+"&max_prestaciones_mes_ptmh="+max_prestaciones_mes_ptmh,
+                function(data){
+                    generar_tabla_lista_prestaciones();
+                })
+
+                
+            }
+        }
+
+        function generar_tabla_lista_prestaciones(){
+            let tablaOperados= '<div class="card-body"><div class="col-12 table-responsive"><table class="table table-striped"><thead>';
+                tablaOperados+="<th>Prestación</th>";
+                tablaOperados+="<th>Valor</th>";
+                tablaOperados+="<th>Max. por Mes</th>";
+                tablaOperados+="<th>Total</th>";
+                tablaOperados+="<th>Eliminar</th>";
+                $.getJSON("{{action('SolicitudContratoController@solicitudContratoAgregarPrestacion')}}",
+                function(data){
+                    data.forEach(function(element, key) {
+                        tablaOperados+="<tr><td>"+element.tx_nombre+"</td>";  
+                        tablaOperados+="<td>"+element.valor+"</td>";
+                        tablaOperados+="<td>"+element.max+"</td>";
+                        tablaOperados+="<td>"+element.total+"</td>";
+                        tablaOperados+='<td><a class="btn btn-danger btn-xs" style="color:white" onclick="eliminarPaciente(1,' + 1 +')" title="Eliminar" target="_blank"><i class="fa fa-trash" style="color:white"></i></a></td>';
+                        tablaOperados+="</tr>";
+                    });
+
+                    tablaOperados+="</table>";   
+				    document.getElementById('prestaciones').innerHTML = tablaOperados;
+                })
+        }
 
         @if(isset($solicitudContrato))
             var id = @json($solicitudContrato->tipoContrato->id);

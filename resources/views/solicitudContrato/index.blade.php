@@ -34,7 +34,7 @@
                                     <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre" value="{{request()->nombre}}">
                                 </div>
                                 <div class="col-sm-2">
-                                    <select class="form-control" id="servicio_id" name="servicio_id" {{Auth::user()->perfil_id == 4 ? 'readonly' : ''}}>
+                                    <select class="form-control" id="servicio_id" name="servicio_id" {{Auth::user()->perfil_id == 4 ? 'disabled' : ''}}>
                                         <option value="">Seleccione Servicio</option>
                                         @foreach ($servicios as $servicio)
                                             <option value={{$servicio->id}} {{request()->servicio_id == $servicio->id ? 'selected' : ''}}>{{$servicio->tx_descripcion}}</option>								
@@ -71,6 +71,7 @@
                                     <th>Servicio</th>
                                     <th>Especialidad</th>
                                     <th>Tipo de Contrato</th>
+                                    <th>Fc. Inicio</th>
                                     <th>Estado</th>
                                     <th><i class="fa fa-cog"></i></th>
                                 </thead>
@@ -83,14 +84,17 @@
                                             <td>{{$solicitudContrato->servicio->tx_descripcion}}</td>
                                             <td>{{$solicitudContrato->especialidad->tx_descripcion}}</td>
                                             <td>{{$solicitudContrato->tipoContrato->nombre}}</td>
+                                            <td>{{$solicitudContrato->fecha_inicio}}</td>
                                             <td><span class="badge {{$solicitudContrato->estado->class_laravel}}">{{$solicitudContrato->estado->nombre}}</span></td>
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="solicitudContrato/{{$solicitudContrato->id}}" title="Ver Detalle" class="btn btn-secondary btn-xs"><i class="fa fa-file-pdf" style="color:white"></i></a>
                                                     @if($solicitudContrato->estado_id == 1)
                                                         <a href="solicitudContrato/{{$solicitudContrato->id}}/edit" title="Terminar Solicitud" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
-                                                        <a href="solicitudContratoEnviar/{{$solicitudContrato->id}}" title="Enviar" class="btn btn-primary btn-xs"><i class="fa fa-paper-plane" style="color:white"></i></a>
-                                                        <a href="solicitudContrato/{{$solicitudContrato->id}}" title="Eliminar" class="btn btn-danger btn-xs"><i class="fa fa-trash" style="color:white"></i></a>
+                                                        @if(Auth::user()->perfil_id < 4)
+                                                            <a href="solicitudContratoEnviar/{{$solicitudContrato->id}}" title="Enviar" class="btn btn-primary btn-xs"><i class="fa fa-paper-plane" style="color:white"></i></a>
+                                                        @endif
+                                                        <a href="solicitudContratoAnular/{{$solicitudContrato->id}}" title="Anular" class="btn btn-danger btn-xs"><i class="fa fa-trash" style="color:white"></i></a>
                                                     @endif
                                                     @if($solicitudContrato->estado_id == 3)
                                                         <a href="solicitudContratoPdf/{{$solicitudContrato->id}}" title="Ver Contrato" class="btn btn-success btn-xs"><i class="fa fa-check" style="color:white"></i></a>

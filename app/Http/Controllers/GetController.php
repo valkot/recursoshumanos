@@ -68,7 +68,7 @@ class GetController extends Controller
 
     public function getValorPrestacion(Request $request)
     {
-        $data = PrestacionFuncionario::find($request->id_prestacion_pqe);
+        $data = PrestacionFuncionario::find($request->id_prestacion);
         return $data;
     }
 }
