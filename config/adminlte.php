@@ -257,6 +257,11 @@ return [
                     'icon'    => 'fas fa-fw fa-dollar-sign',
                 ],
                 [
+                    'text' => 'Tarifa por Prestaciones',
+                    'url'  => 'prestacion',
+                    'icon'    => 'fas fa-fw fa-dollar-sign',
+                ],
+                [
                     'text' => 'Tipos de Contrato',
                     'url'  => 'tipoContrato',
                     'icon'    => 'fas fa-fw fa-book',

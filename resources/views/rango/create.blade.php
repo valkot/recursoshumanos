@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Tipo de Contrato')
+@section('title', 'Valores del Especialista')
 
 @section('content')
     <br>

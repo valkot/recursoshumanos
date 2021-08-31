@@ -33,6 +33,8 @@ Route::resource('/tipoContrato', 'TipoContratoController');
 
 Route::resource('/rango', 'RangoController');
 
+Route::resource('/prestacion', 'PrestacionFuncionarioController');
+
 Route::get('/getDatosRut', 'GetController@getDatosRut');
 Route::get('/getValor', 'GetController@getValor');
 Route::get('/getValorPrestacion', 'GetController@getValorPrestacion');

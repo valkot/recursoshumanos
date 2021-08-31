@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Rangos')
+@section('title', 'Lista de Prestaciones')
 
 @section('content_header')
     @if(session()->has('message'))
@@ -19,7 +19,7 @@
     <br>
 	<div class="card card-info">
 		<div class="card-header">
-		    <h3 class="card-title">Lista de Rangos</h3>
+		    <h3 class="card-title">Lista de Prestaciones</h3>
 		</div>
 		<div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -27,14 +27,14 @@
                     <div class="col-sm-12">
                         <form class="form-horizontal">
                             <div class="form-group row">
-                                {{-- <div class="col-sm-2">
-                                    <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre" value="{{request()->nombre}}">
+                                <div class="col-sm-2">
+                                    <input type="text" name="tx_nombre" class="form-control" id="tx_nombre" placeholder="Nombre" value="{{request()->tx_nombre}}">
                                 </div>
                                 <div class="col-sm-2">
                                     <button type="submit" class="btn btn-info">Filtrar</button>
-                                </div> --}}
-                                <div class="col-sm-2 offset-sm-10">
-                                    <a href={{url('rango/create')}} class="btn btn-success" type="button" title="Agregar Nueva Solicitud"><i class="fa fa-plus" style="color:white"></i></a>
+                                </div>
+                                <div class="col-sm-2 offset-sm-6">
+                                    <a href={{url('prestacion/create')}} class="btn btn-success" type="button" title="Agregar Nueva Prestacion"><i class="fa fa-plus" style="color:white"></i></a>
                                 </div>
                             </div>
                         </form>
@@ -42,25 +42,19 @@
                             <table class="table table-striped table-hover">
                                 <thead style="font-size:12px">
                                     <th>ID</th>
-                                    <th>Especialidad</th>
-                                    <th>Servicio</th>
-                                    <th>Diurno</th>
-                                    <th>Extra</th>
-                                    <th>Festivo</th>
+                                    <th>Nombre</th>
+                                    <th>Valor</th>
                                     <th><i class="fa fa-cog"></i></th>
                                 </thead>
                                 <tbody>
-                                    @foreach ($rangos as $rango)
+                                    @foreach ($prestaciones as $prestacion)
                                         <tr style="font-size:12px">
-                                            <td>{{$rango->id}}</td>
-                                            <td>{{$rango->especialidad->tx_descripcion}}</td>
-                                            <td>{{$rango->servicio->tx_descripcion}}</td>
-                                            <td>{{$rango->valor->diurno}}</td>
-                                            <td>{{$rango->valor->extra}}</td>
-                                            <td>{{$rango->valor->festivo}}</td>
+                                            <td>{{$prestacion->id}}</td>
+                                            <td>{{$prestacion->tx_nombre}}</td>
+                                            <td>{{$prestacion->valor}}</td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href={{url("rango/".$rango->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
+                                                    <a href={{url("prestacion/".$prestacion->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
                                                     {{-- <form action="{{ route('paciente.destroy',$paciente->id) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
@@ -73,7 +67,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        {{ $rangos->appends(request()->query())->links() }}
+                        {{ $prestaciones->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
@@ -83,8 +77,6 @@
 
 @section('js')
     <script>
-        $("body").addClass("sidebar-collapse");
-
         $(".alert-success").fadeTo(20000, 500).slideUp(500, function(){
             $(".alert-success").slideUp(1000);
         });

@@ -183,7 +183,7 @@
             $("#id_especialidad_medica").css('display','').attr('required', false);
             $("#id_especialidad_odontologica").css('display','').attr('disabled', true);
             $("#id_especialidad_odontologica").css('display','').attr('required', false);
-            if(bo == 1){
+            if(bo == 1 || bo == 32){
                 medica.style.display = "block";
                 $("#id_especialidad_medica").css('display','').attr('disabled', false);
                 $("#id_especialidad_medica").css('display','').attr('required', true);
@@ -386,8 +386,9 @@
                 function(data){
                     generar_tabla_lista_prestaciones();
                 })
-
-                
+                $("#id_prestacion_ptmh").val(null);
+                $("#valor_prestacion_ptmh").val(null);
+                $("#max_prestaciones_mes_ptmh").val(null);                
             }
         }
 
