@@ -128,7 +128,7 @@ class SolicitudContratoController extends Controller
                     'valor_hora_festivo_ht'=> request()->valor_hora_festivo_ht,
                     'dias_ausentados_ht'=> request()->dias_ausentados_ht
                 ];
-                $subContrato = ContratoHonorarioTurno::create($ContratoRequest);
+                $subContrato = ContratoHonorarioTurno::updateOrCreate(['id' => $request->id_contrato], $ContratoRequest);
                 break;
 
             case 2:
@@ -137,7 +137,7 @@ class SolicitudContratoController extends Controller
                     'valor_mensual_hsa'=> request()->valor_mensual_hsa,
                     'dias_ausentados_hsa'=> request()->dias_ausentados_hsa
                 ];
-                $subContrato = ContratoHonorarioSumaAlzada::create($ContratoRequest);
+                $subContrato = ContratoHonorarioSumaAlzada::updateOrCreate(['id' => $request->id_contrato], $ContratoRequest);
                 break;
 
             case 3:
@@ -146,7 +146,7 @@ class SolicitudContratoController extends Controller
                     'valor_mensual_hsa'=> request()->valor_mensual_hsa,
                     'dias_ausentados_hsa'=> request()->dias_ausentados_hsa
                 ];
-                $subContrato = ContratoProgramaChileCrece::create($ContratoRequest);
+                $subContrato = ContratoProgramaChileCrece::updateOrCreate(['id' => $request->id_contrato], $ContratoRequest);
                 break;
             
             case 4:
@@ -158,7 +158,7 @@ class SolicitudContratoController extends Controller
                     'valor_prestacion_pqe'=> request()->valor_prestacion_pqe,
                     'max_prestaciones_mes_pqe'=> request()->max_prestaciones_mes_pqe
                 ];
-                $subContrato = ContratoProgramaQuinientosEspecialista::create($ContratoRequest);
+                $subContrato = ContratoProgramaQuinientosEspecialista::updateOrCreate(['id' => $request->id_contrato], $ContratoRequest);
                 break;
 
             default:
@@ -176,6 +176,7 @@ class SolicitudContratoController extends Controller
             'contrato_type'=> $tipoContrato->modelo,
             'contrato_id'=> $subContrato->id
         ];
+        // dd($solicitudContratoRequest);
 
         $solicitudContrato = SolicitudContrato::updateOrCreate(['id' => $request->id_solicitud], $solicitudContratoRequest);
 
@@ -228,7 +229,7 @@ class SolicitudContratoController extends Controller
      */
     public function edit($id)
     {
-        $solicitudContrato = SolicitudContrato::with('funcionario', 'especialidad', 'contrato', 'tipoContrato')->find($id);
+        $solicitudContrato = SolicitudContrato::with('funcionario', 'especialidad', 'tipoEspecialidad', 'contrato', 'tipoContrato')->find($id);
         $sexos = Sexo::where("bo_estado", 1)->get();
         $comunas = Comuna::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $servicios = Servicio::where("bo_estado", 1)->orderBy('tx_descripcion')->get();

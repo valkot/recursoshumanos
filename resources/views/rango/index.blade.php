@@ -47,7 +47,7 @@
                                     <th>Diurno</th>
                                     <th>Extra</th>
                                     <th>Festivo</th>
-                                    <th><i class="fa fa-cog"></i></th>
+                                    {{-- <th><i class="fa fa-cog"></i></th> --}}
                                 </thead>
                                 <tbody>
                                     @foreach ($rangos as $rango)
@@ -58,16 +58,16 @@
                                             <td>{{$rango->valor->diurno}}</td>
                                             <td>{{$rango->valor->extra}}</td>
                                             <td>{{$rango->valor->festivo}}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <div class="btn-group">
                                                     <a href={{url("rango/".$rango->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
-                                                    {{-- <form action="{{ route('paciente.destroy',$paciente->id) }}" method="POST">
+                                                    <form action="{{ route('paciente.destroy',$paciente->id) }}" method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button onclick="return confirm('¿Esta seguro de eliminar este paciente?');" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash" style="color:white"></i></button>
-                                                    </form> --}}
+                                                    </form>
                                                 </div>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

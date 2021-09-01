@@ -19,13 +19,17 @@ class SolicitudContrato extends Model
 
         static::creating(function($solicitudContrato)
         {
-			$solicitudContrato->servicio_id = Auth::user()->servicio_id;
+            if(isset(Auth::user()->servicio_id)){
+                $solicitudContrato->servicio_id = Auth::user()->servicio_id;
+            }
             $solicitudContrato->usuario_id = Auth::id();
         });
           
         static::created(function($solicitudContrato)
         {
-			$solicitudContrato->servicio_id = Auth::user()->servicio_id;
+            if(isset(Auth::user()->servicio_id)){
+                $solicitudContrato->servicio_id = Auth::user()->servicio_id;
+            }
             $solicitudContrato->usuario_id = Auth::id();
         });
     }
@@ -72,6 +76,11 @@ class SolicitudContrato extends Model
     public function contrato()
     {
         return $this->morphTo();
+    }
+
+	public function tipoEspecialidad()
+    {
+		return $this->belongsTo('App\TipoEspecialidad', 'especialidad_type', 'modelo');
     }
 
     public function especialidad()

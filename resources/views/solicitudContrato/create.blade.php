@@ -71,7 +71,7 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <label for="tipo_contrato_id">Tipo de Contrato<span style="color:#FF0000";>*</span></label>
-                            <select class="form-control" id="tipo_contrato_id" name="tipo_contrato_id" onchange="tipoContrato($(this).val());" required>
+                            <select class="form-control" id="tipo_contrato_id" name="tipo_contrato_id" onchange="tipoContrato($(this).val());" {{isset($solicitudContrato) ? "disabled" : ""}} required>
                                 <option value="">Seleccione Tipo de Contrato</option>
                                 @foreach ($tiposContratos as $tipoContrato)
                                     <option value={{$tipoContrato->id}} {{isset($solicitudContrato) && $solicitudContrato->tipoContrato->id == $tipoContrato->id ? "selected" : ""}}>{{$tipoContrato->nombre}}</option>								
@@ -144,7 +144,7 @@
             @include('tipoContrato.programaQuinientosEspecialista.formulario')
             @include('tipoContrato.programaTresTresMilHoras.formulario')
             <div class="card-footer text-right">
-                <button type="submit" class="btn btn-info">Guardar</button>
+                <button type="submit" class="btn btn-info" onclick="guardar();">Guardar</button>
             </div>
         </form>
     </div>
@@ -154,6 +154,10 @@
     <script>
         $("body").addClass("sidebar-collapse");
 
+        function guardar(){
+            $("#tipo_contrato_id").css('display','').attr('disabled', false);
+        }
+
         function getPerson(rut){
             $.getJSON("{{action('GetController@getDatosRut')}}?rut="+rut,
                 function(data){
@@ -161,7 +165,7 @@
                         alert(data.error);
                         $("#rut").val(null);
                     }else{
-                        $("#id_paciente").val(data.id_paciente);
+                        $("#funcionario_id").val(data.funcionario_id);
                         $("#rut").val(data.rut);
                         $("#tx_nombre").val(data.tx_nombre);
                         $("#tx_apellido_paterno").val(data.tx_apellido_paterno);
@@ -194,10 +198,12 @@
             }
         }
 
-        function idEspecialidad(especialidad_id, id_tipo_especialidad){
+        function idEspecialidad(especialidad_id, id_tipo_especialidad, edit){
             $("#id_tipo_especialidad").val(id_tipo_especialidad);
             $("#especialidad_id").val(especialidad_id);
-            asignarValor();
+            if(edit != 1){
+                asignarValor();
+            }
         }
 
         function tipoContrato(bo){
@@ -416,8 +422,33 @@
         }
 
         @if(isset($solicitudContrato))
-            var id = @json($solicitudContrato->tipoContrato->id);
-            tipoContrato(id);
+            var id_tipo_contrato = @json($solicitudContrato->tipoContrato->id);
+            var especialidad_id = @json($solicitudContrato->especialidad_id);
+            var especialidad_type = @json($solicitudContrato->tipoEspecialidad->id);
+
+            switch (especialidad_type) {
+                case 1:
+                    $("#id_tipo_profesion").val(1);
+                    tipoEspecialidad(1);
+                    $("#id_especialidad_medica").val(especialidad_id);
+                    break;
+
+                case 2:
+                    $("#id_tipo_profesion").val(2);
+                    tipoEspecialidad(2);
+                    $("#id_especialidad_odontologica").val(especialidad_id);
+                    break;
+
+                case 3:
+                    tipoEspecialidad(especialidad_id);
+                    $("#id_tipo_profesion").val(especialidad_id);
+                    break;
+            
+                default:
+                    break;
+            }
+            idEspecialidad(especialidad_id, especialidad_type, 1);
+            tipoContrato(id_tipo_contrato);
 
             valorMensualDiurnoHt();
             valorMensualExtraHt();

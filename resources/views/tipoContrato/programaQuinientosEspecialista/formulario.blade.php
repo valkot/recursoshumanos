@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="meses_periodo_pqe">Meses del Periodo:<span style="color:#FF0000";>*</span></label>
-                    <input type="number" class="form-control" id="meses_periodo_pqe" name="meses_periodo_pqe" value="{{$solicitudContrato->contrato->meses_periodo_pqe ?? ''}}" onchange="calcularMaxPrestaPeriodo();">
+                    <input type="number" class="form-control" id="meses_periodo_pqe" name="meses_periodo_pqe" value="{{$solicitudContrato->contrato->meses_periodo_pqe ?? ''}}" onchange="calcularMaxPrestaPeriodoPqe();">
                 </div>
                 <div class="col-sm-3">
                     <label for="max_prestaciones_periodo_pqe">Max. prestaciones por periodo:</label>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="funciones_clinicas_pqe">Funciones Clinicas Anexas:<span style="color:#FF0000";>*</span></label>
-                    <input type="number" class="form-control" id="funciones_clinicas_pqe" name="funciones_clinicas_pqe" value="{{$solicitudContrato->contrato->funciones_clinicas_pqe ?? ''}}" onchange="calcularMaxPrestaPeriodo();">
+                    <input type="number" class="form-control" id="funciones_clinicas_pqe" name="funciones_clinicas_pqe" value="{{$solicitudContrato->contrato->funciones_clinicas_pqe ?? ''}}" onchange="calcularMaxPrestaPeriodoPqe();">
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="max_prestaciones_mes_pqe">Max. prestaciones por mes:<span style="color:#FF0000";>*</span></label>
-                    <input type="number" class="form-control" id="max_prestaciones_mes_pqe" name="max_prestaciones_mes_pqe" value="{{$solicitudContrato->contrato->max_prestaciones_mes_pqe ?? ''}}" onchange="calcularMaxPrestaPeriodo();">
+                    <input type="number" class="form-control" id="max_prestaciones_mes_pqe" name="max_prestaciones_mes_pqe" value="{{$solicitudContrato->contrato->max_prestaciones_mes_pqe ?? ''}}" onchange="calcularMaxPrestaPeriodoPqe();">
                 </div>
                 <div class="col-sm-3">
                     <label for="total_pagar_pqe">Total a pagar:</label>

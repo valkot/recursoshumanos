@@ -46,7 +46,7 @@ class GetController extends Controller
         $data = Funcionario::where('rut', $rut)->first();
         if($data){
             $data = $data->toArray();
-            $data['id_paciente'] = $data['id'];
+            $data['funcionario_id'] = $data['id'];
         }else{
             $data = $fonasaApi->fetchNormalized($rutDV[0], $rutDV[1]);
             $data['id_comuna'] = $data['cdgComuna'];
