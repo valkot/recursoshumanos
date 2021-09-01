@@ -92,4 +92,9 @@ class SolicitudContrato extends Model
     {
 		return $this->belongsTo('App\SolicitudContratoEstado', 'estado_id');
     }
+
+	public function prestaciones()
+    {
+        return $this->hasMany('App\ContratoProgramaTresTresMilHorasPrestacion', 'contrato_id');
+    }
 }

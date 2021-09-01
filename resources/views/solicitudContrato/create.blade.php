@@ -398,6 +398,13 @@
             }
         }
 
+        function eliminarPrestacion(key){
+            $.getJSON("{{action('SolicitudContratoController@solicitudContratoAgregarPrestacion')}}?key="+key,
+				function(data){
+					generar_tabla_lista_prestaciones();
+				})
+        }
+
         function generar_tabla_lista_prestaciones(){
             let tablaOperados= '<div class="card-body"><div class="col-12 table-responsive"><table class="table table-striped"><thead>';
                 tablaOperados+="<th>Prestación</th>";
@@ -405,6 +412,7 @@
                 tablaOperados+="<th>Max. por Mes</th>";
                 tablaOperados+="<th>Total</th>";
                 tablaOperados+="<th>Eliminar</th>";
+                var total = 0;
                 $.getJSON("{{action('SolicitudContratoController@solicitudContratoAgregarPrestacion')}}",
                 function(data){
                     data.forEach(function(element, key) {
@@ -412,10 +420,16 @@
                         tablaOperados+="<td>"+element.valor+"</td>";
                         tablaOperados+="<td>"+element.max+"</td>";
                         tablaOperados+="<td>"+element.total+"</td>";
-                        tablaOperados+='<td><a class="btn btn-danger btn-xs" style="color:white" onclick="eliminarPaciente(1,' + 1 +')" title="Eliminar" target="_blank"><i class="fa fa-trash" style="color:white"></i></a></td>';
+                        tablaOperados+='<td><a class="btn btn-danger btn-xs" style="color:white" onclick="eliminarPrestacion('+key+')" title="Eliminar" target="_blank"><i class="fa fa-trash" style="color:white"></i></a></td>';
                         tablaOperados+="</tr>";
+                        total = total + element.total;
                     });
-
+                    
+                    tablaOperados+="<th>Monto Final</th>";
+                    tablaOperados+="<th></th>";
+                    tablaOperados+="<th></th>";
+                    tablaOperados+="<th>"+total+"</th>";
+                    tablaOperados+="<th></th>";
                     tablaOperados+="</table>";   
 				    document.getElementById('prestaciones').innerHTML = tablaOperados;
                 })

@@ -17,6 +17,7 @@ use App\ContratoHonorarioTurno;
 use App\ContratoHonorarioSumaAlzada;
 use App\ContratoProgramaChileCrece;
 use App\ContratoProgramaQuinientosEspecialista;
+use App\ContratoProgramaTresTresMilHorasPrestacion;
 use App\PrestacionFuncionario;
 use Illuminate\Http\Request;
 use Auth;
@@ -161,6 +162,23 @@ class SolicitudContratoController extends Controller
                 $subContrato = ContratoProgramaQuinientosEspecialista::updateOrCreate(['id' => $request->id_contrato], $ContratoRequest);
                 break;
 
+            case 5:
+                // $ContratoRequest = [
+                //     'numero_hora_pqe'=> request()->numero_hora_pqe,
+                //     'meses_periodo_pqe'=> request()->meses_periodo_pqe,
+                //     'funciones_clinicas_pqe'=> request()->funciones_clinicas_pqe,
+                //     'id_prestacion_pqe'=> request()->id_prestacion_pqe,
+                //     'valor_prestacion_pqe'=> request()->valor_prestacion_pqe,
+                //     'max_prestaciones_mes_pqe'=> request()->max_prestaciones_mes_pqe
+                // ];
+                // $subContrato = ContratoProgramaQuinientosEspecialista::updateOrCreate(['id' => $request->id_contrato], $ContratoRequest);
+                
+                $subContrato = New SolicitudContrato();
+                $subContrato->id = 0;
+                // dd($subContrato);
+                
+                break;
+
             default:
                 # code...
                 break;
@@ -180,6 +198,23 @@ class SolicitudContratoController extends Controller
 
         $solicitudContrato = SolicitudContrato::updateOrCreate(['id' => $request->id_solicitud], $solicitudContratoRequest);
 
+        if($tipoContrato->id == 5){
+            session_start();
+            foreach ($_SESSION['lista_prestaciones'] as $key => $prestacion) {
+                // dd($prestacion);
+                $ContratoRequest = [
+                    'contrato_id' => $solicitudContrato->id,
+                    'prestacion_id' => $prestacion['id'],
+                    'valor' => $prestacion['valor'],
+                    'maximo_mes' => $prestacion['max']
+                ];
+                $prestaciones = ContratoProgramaTresTresMilHorasPrestacion::create($ContratoRequest);
+                // dump($ContratoRequest);
+            }
+            // dd($_SESSION['lista_prestaciones']);
+            $_SESSION['lista_prestaciones'] = null;
+        }
+
         if($funcionario && $solicitudContratoRequest){
             return redirect('/solicitudContrato')->with('message', "La solicitud se ha ingresado correctamente");
         }else{
@@ -195,7 +230,8 @@ class SolicitudContratoController extends Controller
      */
     public function show($id)
     {
-        $solicitudContrato = SolicitudContrato::with('funcionario', 'usuario', 'especialidad', 'contrato', 'tipoContrato')->find($id);
+        $solicitudContrato = SolicitudContrato::with('funcionario', 'usuario', 'especialidad', 'contrato', 'tipoContrato', 'prestaciones')->find($id);
+        // dd(array_sum($solicitudContrato->prestaciones->pluck('total')->toArray()));
         $data2 = array(
             'user' => 'hsjd',
             'key' => 'desa',
@@ -423,11 +459,13 @@ class SolicitudContratoController extends Controller
             $prestacion['max'] = $request->max_prestaciones_mes_ptmh;
             $prestacion['total'] = $prestacion['valor'] * $request->max_prestaciones_mes_ptmh;
             array_push($lista_prestaciones, $prestacion);
-            $_SESSION['lista_prestaciones'] = $lista_prestaciones;
         }
-        // dd($prestacion);
-        // $lista_pacientes['error'] = 0;
-        // $lista_pacientes = $_SESSION['lista_pacientes'];
+
+        if(isset($request->key)){
+            unset($lista_prestaciones[$request->key]);
+        }
+
+        $_SESSION['lista_prestaciones'] = $lista_prestaciones;
 
         return $lista_prestaciones;
     }
