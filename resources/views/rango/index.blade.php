@@ -54,7 +54,7 @@
                                         <tr style="font-size:12px">
                                             <td>{{$rango->id}}</td>
                                             <td>{{$rango->especialidad->tx_descripcion}}</td>
-                                            <td>{{$rango->servicio->tx_descripcion}}</td>
+                                            <td>{{$rango->servicio->tx_descripcion ?? ''}}</td>
                                             <td>{{$rango->valor->diurno}}</td>
                                             <td>{{$rango->valor->extra}}</td>
                                             <td>{{$rango->valor->festivo}}</td>

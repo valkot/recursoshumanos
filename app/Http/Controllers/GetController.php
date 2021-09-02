@@ -60,6 +60,9 @@ class GetController extends Controller
         $tipoEspecialidad = TipoEspecialidad::find($request->id_tipo_especialidad);
         $rango = Rango::with('valor')->where('especialidad_id', $request->especialidad_id)->where('servicio_id', $request->servicio_id)->where('especialidad_type', $tipoEspecialidad->modelo)->first();
         if(is_null($rango)){
+            $rango = Rango::with('valor')->where('especialidad_id', $request->especialidad_id)->whereNull('servicio_id')->where('especialidad_type', $tipoEspecialidad->modelo)->first();
+        }
+        if(is_null($rango)){
             return 0;
         }
         $data = $rango->valor;

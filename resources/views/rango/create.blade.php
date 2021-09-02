@@ -18,8 +18,8 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <label for="servicio_id">Servicio<span style="color:#FF0000";>*</span></label>
-                            <select class="form-control" id="servicio_id" name="servicio_id" onclick="asignarValor();" required>
-                                <option value="">Seleccione Servicio</option>
+                            <select class="form-control" id="servicio_id" name="servicio_id" onclick="asignarValor();">
+                                <option value="">ESTANDAR</option>
                                 @foreach ($servicios as $servicio)
                                     <option value={{$servicio->id}}>{{$servicio->tx_descripcion}}</option>								
                                 @endforeach
