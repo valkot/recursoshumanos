@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rango extends Model
+class TarifaHonorarioTurno extends Model
 {
-    protected $table = 'rango';
+    protected $table = 'tarifa_honorario_turno';
     
     public $guarded = [];
     public $timestamps = false;
@@ -23,6 +23,6 @@ class Rango extends Model
 
     public function valor()
     {
-		return $this->hasOne('App\RangoValor', 'rango_id')->latest();
+		return $this->hasOne('App\TarifaHonorarioTurnoValor', 'tarifa_id')->latest();
     }
 }

@@ -5,13 +5,13 @@
 @section('content')
     <br>
     <div class="card">
-        <form role="form" class="form-horizontal" id="form" method="POST" action="{{action('RangoController@store')}}">
+        <form role="form" class="form-horizontal" id="form" method="POST" action="{{action('TarifaHonorarioTurnoController@store')}}">
             {{ csrf_field() }}
-            <input type="hidden" id="id" name="id" value="{{$rango->id ?? ''}}"/>
+            <input type="hidden" id="id" name="id" value="{{$tarifa->id ?? ''}}"/>
             <input type="hidden" id="id_tipo_especialidad" name="id_tipo_especialidad"/>
             <input type="hidden" id="especialidad_id" name="especialidad_id"/>
             <div class="card-header">
-                <h3 style="color:green" class="card-title"><strong>Rango</strong></h3>
+                <h3 style="color:green" class="card-title"><strong>Tarifa</strong></h3>
             </div>
             <div class="card-body">
                 <div class="form-group">

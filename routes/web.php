@@ -28,10 +28,11 @@ Route::get('/solicitudContratoAnular/{id}', 'SolicitudContratoController@solicit
 Route::get('/solicitudContratoAgregarPrestacion', 'SolicitudContratoController@solicitudContratoAgregarPrestacion');
 
 Route::resource('/user', 'UserController');
+Route::get('/user/restaurar/{id}', 'UserController@restaurar');
 
 Route::resource('/tipoContrato', 'TipoContratoController');
 
-Route::resource('/rango', 'RangoController');
+Route::resource('/tarifaHonorarioTurno', 'TarifaHonorarioTurnoController');
 
 Route::resource('/prestacion', 'PrestacionFuncionarioController');
 

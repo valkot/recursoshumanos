@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Rango;
-use App\RangoValor;
+use App\TarifaHonorarioTurno;
+use App\TarifaHonorarioTurnoValor;
 use App\Servicio;
 use App\TipoEspecialidad;
 use App\TituloProfesional;
@@ -11,7 +11,7 @@ use App\EspecialidadMedica;
 use App\EspecialidadOdontologica;
 use Illuminate\Http\Request;
 
-class RangoController extends Controller
+class TarifaHonorarioTurnoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,9 +20,9 @@ class RangoController extends Controller
      */
     public function index(Request $request)
     {
-        $rangos = Rango::with('servicio', 'especialidad', 'valor')->paginate(10);
-        // dd($rangos);
-        return view('rango.index', compact('rangos'));
+        $tarifas = TarifaHonorarioTurno::with('servicio', 'especialidad', 'valor')->paginate(10);
+        // dd($tarifas);
+        return view('tipoContrato.honorarioTurno.tarifa.index', compact('tarifas'));
     }
 
     /**
@@ -36,7 +36,7 @@ class RangoController extends Controller
         $titulosProfesionales = TituloProfesional::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $especialidadesMedicas = EspecialidadMedica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $especialidadesOdontologicas = EspecialidadOdontologica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
-        return view('rango.create', compact('servicios', 'titulosProfesionales', 'especialidadesMedicas', 'especialidadesOdontologicas'));
+        return view('tipoContrato.honorarioTurno.tarifa.create', compact('servicios', 'titulosProfesionales', 'especialidadesMedicas', 'especialidadesOdontologicas'));
     }
 
     /**
@@ -53,32 +53,32 @@ class RangoController extends Controller
             'especialidad_type'=> $tipoEspecialidad->modelo,
             'servicio_id'=> request()->servicio_id
         ];
-        $rango = Rango::updateOrCreate([
+        $rango = TarifaHonorarioTurno::updateOrCreate([
             'especialidad_id' => $request->especialidad_id, 
             'especialidad_type'=> $tipoEspecialidad->modelo,
             'servicio_id'=> request()->servicio_id
         ], $rangoRequest);
         $valorRequest = [
-            'rango_id'=> $rango->id,
+            'tarifa_id'=> $rango->id,
             'diurno'=> request()->diurno,
             'extra'=> request()->extra,
             'festivo'=> request()->festivo
         ];
-        $valor = RangoValor::create($valorRequest);
+        $valor = TarifaHonorarioTurnoValor::create($valorRequest);
         if($valor){
-            return redirect('/rango/')->with('message', "Se han actualizado los datos");
+            return redirect('/tarifaHonorarioTurno/')->with('message', "Se han actualizado los datos");
         }else{
-            return redirect('/rango/')->with('error', "No se han actualizado los datos");
+            return redirect('/tarifaHonorarioTurno/')->with('error', "No se han actualizado los datos");
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Rango  $rango
+     * @param  \App\TarifaHonorarioTurno  $tarifaHonorarioTurno
      * @return \Illuminate\Http\Response
      */
-    public function show(Rango $rango)
+    public function show(TarifaHonorarioTurno $tarifaHonorarioTurno)
     {
         //
     }
@@ -86,10 +86,10 @@ class RangoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Rango  $rango
+     * @param  \App\TarifaHonorarioTurno  $tarifaHonorarioTurno
      * @return \Illuminate\Http\Response
      */
-    public function edit(Rango $rango)
+    public function edit(TarifaHonorarioTurno $tarifaHonorarioTurno)
     {
         //
     }
@@ -98,10 +98,10 @@ class RangoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rango  $rango
+     * @param  \App\TarifaHonorarioTurno  $tarifaHonorarioTurno
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rango $rango)
+    public function update(Request $request, TarifaHonorarioTurno $tarifaHonorarioTurno)
     {
         //
     }
@@ -109,10 +109,10 @@ class RangoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Rango  $rango
+     * @param  \App\TarifaHonorarioTurno  $tarifaHonorarioTurno
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rango $rango)
+    public function destroy(TarifaHonorarioTurno $tarifaHonorarioTurno)
     {
         //
     }

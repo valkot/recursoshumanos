@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Rangos')
+@section('title', 'Lista de Tarifa Honorario Turno')
 
 @section('content_header')
     @if(session()->has('message'))
@@ -19,7 +19,7 @@
     <br>
 	<div class="card card-info">
 		<div class="card-header">
-		    <h3 class="card-title">Lista de Rangos</h3>
+		    <h3 class="card-title">Lista de Tarifas Honorario Turno</h3>
 		</div>
 		<div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -34,7 +34,7 @@
                                     <button type="submit" class="btn btn-info">Filtrar</button>
                                 </div> --}}
                                 <div class="col-sm-2 offset-sm-10">
-                                    <a href={{url('rango/create')}} class="btn btn-success" type="button" title="Agregar Nueva Solicitud"><i class="fa fa-plus" style="color:white"></i></a>
+                                    <a href={{url('tarifaHonorarioTurno/create')}} class="btn btn-success" type="button" title="Agregar Nueva Solicitud"><i class="fa fa-plus" style="color:white"></i></a>
                                 </div>
                             </div>
                         </form>
@@ -50,14 +50,14 @@
                                     {{-- <th><i class="fa fa-cog"></i></th> --}}
                                 </thead>
                                 <tbody>
-                                    @foreach ($rangos as $rango)
+                                    @foreach ($tarifas as $tarifa)
                                         <tr style="font-size:12px">
-                                            <td>{{$rango->id}}</td>
-                                            <td>{{$rango->especialidad->tx_descripcion}}</td>
-                                            <td>{{$rango->servicio->tx_descripcion ?? ''}}</td>
-                                            <td>{{$rango->valor->diurno}}</td>
-                                            <td>{{$rango->valor->extra}}</td>
-                                            <td>{{$rango->valor->festivo}}</td>
+                                            <td>{{$tarifa->id}}</td>
+                                            <td>{{$tarifa->especialidad->tx_descripcion}}</td>
+                                            <td>{{$tarifa->servicio->tx_descripcion ?? ''}}</td>
+                                            <td>{{$tarifa->valor->diurno}}</td>
+                                            <td>{{$tarifa->valor->extra}}</td>
+                                            <td>{{$tarifa->valor->festivo}}</td>
                                             {{-- <td>
                                                 <div class="btn-group">
                                                     <a href={{url("rango/".$rango->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
@@ -73,7 +73,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        {{ $rangos->appends(request()->query())->links() }}
+                        {{ $tarifas->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>

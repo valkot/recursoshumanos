@@ -252,8 +252,8 @@ return [
                     'icon'    => 'fas fa-fw fa-user',
                 ],
                 [
-                    'text' => 'Tarifa por Especialista',
-                    'url'  => 'rango',
+                    'text' => 'Tarifa Honorario Turno',
+                    'url'  => 'tarifaHonorarioTurno',
                     'icon'    => 'fas fa-fw fa-dollar-sign',
                 ],
                 [

@@ -40,6 +40,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        if(!isset($request->admin)){
+            $request->request->add(['admin' => 0]);
+            // dd('dsad');
+        }
+        // dd($request->all());
         $user = User::updateOrCreate(['id' => $request->id], $request->except('_token'));
         if($user){
             return redirect('/user')->with('message', "El usuario se ha creado correctamente");
@@ -93,6 +98,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if($user->delete()){
+            return redirect('/user')->with('message', "El usuario a sido eliminado correctamente");
+        }else{
+            return redirect('/user')->with('error', "El usuario no a sido eliminado, intente nuevamente");
+        }
+    }
+
+    public function restaurar($id)
+    {
+        User::onlyTrashed()->find($id)->restore();
+        return redirect('/user/'.$id.'/edit')->with('message', "El usuario se ha creado correctamente");
     }
 }

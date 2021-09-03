@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Api\FonasaApi;
+use App\User;
 use App\Funcionario;
-use App\Rango;
+use App\TarifaHonorarioTurno;
 use App\TipoEspecialidad;
 use App\PrestacionFuncionario;
 
@@ -51,6 +52,20 @@ class GetController extends Controller
             $data = $fonasaApi->fetchNormalized($rutDV[0], $rutDV[1]);
             $data['id_comuna'] = $data['cdgComuna'];
         }
+        $user = User::where('rut', $rut)->first();
+        if(isset($user)){
+            $data['user'] = true;
+            $data['id'] = $user->id;
+        }else{
+            $data['user'] = false;
+        }
+        $eliminado = User::onlyTrashed()->where('rut', $rut)->first();
+        if(isset($eliminado)){
+            $data['eliminado'] = true;
+            $data['id'] = $eliminado->id;
+        }else{
+            $data['eliminado'] = false;
+        }
         $data['error'] = null;
         return $data;
     }
@@ -58,14 +73,14 @@ class GetController extends Controller
     public function getValor(Request $request)
     {
         $tipoEspecialidad = TipoEspecialidad::find($request->id_tipo_especialidad);
-        $rango = Rango::with('valor')->where('especialidad_id', $request->especialidad_id)->where('servicio_id', $request->servicio_id)->where('especialidad_type', $tipoEspecialidad->modelo)->first();
-        if(is_null($rango)){
-            $rango = Rango::with('valor')->where('especialidad_id', $request->especialidad_id)->whereNull('servicio_id')->where('especialidad_type', $tipoEspecialidad->modelo)->first();
+        $tarifa = TarifaHonorarioTurno::with('valor')->where('especialidad_id', $request->especialidad_id)->where('servicio_id', $request->servicio_id)->where('especialidad_type', $tipoEspecialidad->modelo)->first();
+        if(is_null($tarifa)){
+            $tarifa = TarifaHonorarioTurno::with('valor')->where('especialidad_id', $request->especialidad_id)->whereNull('servicio_id')->where('especialidad_type', $tipoEspecialidad->modelo)->first();
         }
-        if(is_null($rango)){
+        if(is_null($tarifa)){
             return 0;
         }
-        $data = $rango->valor;
+        $data = $tarifa->valor;
         return $data;
     }
 

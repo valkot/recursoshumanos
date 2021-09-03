@@ -47,28 +47,32 @@
                                     <th>Email</th>
                                     <th>Perfil</th>
                                     <th>Servicio</th>
+                                    <th>Admin</th>
                                     <th><i class="fa fa-cog"></i></th>
                                 </thead>
                                 <tbody>
                                     @foreach ($users as $user)
-                                        <tr style="font-size:12px">
-                                            <td>{{$user->id}}</td>
-                                            <td>{{$user->rut}}</td>
-                                            <td>{{$user->name}}</td>
-                                            <td>{{$user->email}}</td>
-                                            <td>{{$user->perfil->nombre}}</td>
-                                            <td>{{$user->servicio->tx_descripcion ?? ""}}</td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <a href={{url("user/".$user->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
-                                                    {{-- <form action="{{ route('paciente.destroy',$paciente->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button onclick="return confirm('¿Esta seguro de eliminar este paciente?');" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash" style="color:white"></i></button>
-                                                    </form> --}}
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @if (Auth::user()->perfil_id == 1 || $user->perfil_id > 2)
+                                            <tr style="font-size:12px">
+                                                <td>{{$user->id}}</td>
+                                                <td>{{$user->rut}}</td>
+                                                <td>{{$user->name}}</td>
+                                                <td>{{$user->email}}</td>
+                                                <td>{{$user->perfil->nombre}}</td>
+                                                <td>{{$user->servicio->tx_descripcion ?? ""}}</td>
+                                                <td>{{$user->admin == 1 ? 'Si' : 'No'}}</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <a href={{url("user/".$user->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
+                                                        <form action="{{ route('user.destroy',$user->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button onclick="return confirm('¿Esta seguro de eliminar este usuario?');" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash" style="color:white"></i></button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>

@@ -35,7 +35,9 @@
                             <select class="form-control" id="perfil_id" name="perfil_id" onchange="servicio($(this).val());">
                                 <option value="">Seleccione Perfil</option>
                                 @foreach ($perfiles as $perfil)
-                                    <option value={{$perfil->id}} {{isset($user) && $user->perfil_id == $perfil->id ? 'selected' : ''}}>{{$perfil->nombre}}</option>								
+                                    @if (Auth::user()->perfil_id == 1 || $perfil->id > 2)
+                                        <option value={{$perfil->id}} {{isset($user) && $user->perfil_id == $perfil->id ? 'selected' : ''}}>{{$perfil->nombre}}</option>		
+                                    @endif						
                                 @endforeach
                             </select>
                         </div>
@@ -47,6 +49,13 @@
                                     <option value={{$servicio->id}} {{isset($user) && $user->servicio_id == $servicio->id ? 'selected' : ''}}>{{$servicio->tx_descripcion}}</option>								
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="admin" name="admin" value="1" {{isset($user) && $user->admin == 1 ? 'checked' : ''}}>
+                                <label class="form-check-label"><strong>Administrador</strong></label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -64,12 +73,28 @@
         function getPerson(rut){
             $.getJSON("{{action('GetController@getDatosRut')}}?rut="+rut,
                 function(data){
-                    if(data.error != null){
-                        alert(data.error);
-                        $("#rut").val(null);
-                    }else{
-                        $("#rut").val(data.rut);
-                        $("#name").val(data.tx_nombre+' '+data.tx_apellido_paterno+' '+data.tx_apellido_materno);
+                    if(data.user){
+						var opcion = confirm("Este Usuario ya existe desea editarlo?");
+						if(opcion == true){
+							location.href = data.id+"/edit";
+						}else{
+							$("#rut").val("");
+						}
+                    }else if(data.eliminado){
+                        var opcion = confirm("Este Usuario fue eliminado, desea restaurarlo?");
+						if(opcion == true){
+							location.href = "restaurar/"+data.id;
+						}else{
+							$("#rut").val("");
+						}
+					}else{
+                        if(data.error != null){
+                            alert(data.error);
+                            $("#rut").val(null);
+                        }else{
+                            $("#rut").val(data.rut);
+                            $("#name").val(data.tx_nombre+' '+data.tx_apellido_paterno+' '+data.tx_apellido_materno);
+                        }
                     }
                 }
             )
