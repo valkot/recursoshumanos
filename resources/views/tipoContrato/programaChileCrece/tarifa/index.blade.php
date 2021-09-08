@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Tarifa Honorario Turno')
+@section('title', 'Lista de Tarifa Programa Chile Crece Contigo')
 
 @section('content_header')
     @if(session()->has('message'))
@@ -19,7 +19,7 @@
     <br>
 	<div class="card card-info">
 		<div class="card-header">
-		    <h3 class="card-title">Lista de Tarifas Honorario Turno</h3>
+		    <h3 class="card-title">Lista de Tarifas Programa Chile Crece Contigo</h3>
 		</div>
 		<div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -34,7 +34,7 @@
                                     <button type="submit" class="btn btn-info">Filtrar</button>
                                 </div> --}}
                                 <div class="col-sm-2 offset-sm-10">
-                                    <a href={{url('tarifaHonorarioTurno/create')}} class="btn btn-success" type="button" title="Agregar Nueva Solicitud"><i class="fa fa-plus" style="color:white"></i></a>
+                                    <a href={{url('tarifaProgramaChileCrece/create')}} class="btn btn-success" type="button" title="Agregar Nueva Solicitud"><i class="fa fa-plus" style="color:white"></i></a>
                                 </div>
                             </div>
                         </form>

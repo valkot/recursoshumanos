@@ -4,17 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TarifaHonorarioTurno extends Model
+class TarifaProgramaChileCrece extends Model
 {
-    protected $table = 'tarifa_honorario_turno';
+    protected $table = 'tarifa_programa_chile_crece';
     
     public $guarded = [];
     public $timestamps = false;
 
-    public function ano()
-    {
-		return $this->hasOne('App\TarifaHonorarioTurnoAno', 'tarifa_id');
-    }
+    // public function servicio()
+    // {
+		// return $this->belongsTo('App\Servicio', 'servicio_id');
+    // }
 
     // public function especialidad()
     // {

@@ -9,22 +9,20 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('perfil', 'servicio')->paginate(10);
+        $rut = isset($request->rut) ? str_replace(".","",request()->rut) : null;
+        $users = User::with('perfil', 'servicio')
+                ->when(!is_null($rut), function ($collection) use ($rut){
+                    $collection->where('rut', $rut);
+                }) 
+                ->when($request->has('nombre') && !is_null($request->nombre), function ($collection) use ($request){
+                    $collection->whereRaw("nombre LIKE ?", ['%'.$request->nombre.'%']);
+                })
+                ->paginate(10);
         return view('user.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $perfiles = Perfil::get();
@@ -32,44 +30,24 @@ class UserController extends Controller
         return view('user.create', compact('perfiles', 'servicios'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if(!isset($request->admin)){
             $request->request->add(['admin' => 0]);
-            // dd('dsad');
         }
-        // dd($request->all());
         $user = User::updateOrCreate(['id' => $request->id], $request->except('_token'));
         if($user){
-            return redirect('/user')->with('message', "El usuario se ha creado correctamente");
+            return redirect('/user')->with('message', $user->nombre." se ha creado correctamente");
         }else{
             return redirect('/user')->with('error', "No se ha podido crear al usuario");
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function show(User $user)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function edit(User $user)
     {
         $perfiles = Perfil::get();
@@ -78,28 +56,15 @@ class UserController extends Controller
         return view('user.create', compact('user', 'perfiles', 'servicios'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, User $user)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $user)
     {
         if($user->delete()){
-            return redirect('/user')->with('message', "El usuario a sido eliminado correctamente");
+            return redirect('/user')->with('error', $user->nombre." a sido eliminado correctamente");
         }else{
             return redirect('/user')->with('error', "El usuario no a sido eliminado, intente nuevamente");
         }
@@ -107,7 +72,7 @@ class UserController extends Controller
 
     public function restaurar($id)
     {
-        User::onlyTrashed()->find($id)->restore();
-        return redirect('/user/'.$id.'/edit')->with('message', "El usuario se ha creado correctamente");
+        $user = User::onlyTrashed()->find($id)->restore();
+        return redirect('/user/'.$id.'/edit')->with('message', "Se ha restaurado el usuario correctamente");
     }
 }

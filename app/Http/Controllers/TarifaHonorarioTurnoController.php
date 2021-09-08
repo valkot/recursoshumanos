@@ -20,7 +20,7 @@ class TarifaHonorarioTurnoController extends Controller
      */
     public function index(Request $request)
     {
-        $tarifas = TarifaHonorarioTurno::with('servicio', 'especialidad', 'valor')->paginate(10);
+        $tarifas = TarifaHonorarioTurno::paginate(10);
         // dd($tarifas);
         return view('tipoContrato.honorarioTurno.tarifa.index', compact('tarifas'));
     }
@@ -47,24 +47,25 @@ class TarifaHonorarioTurnoController extends Controller
      */
     public function store(Request $request)
     {
-        $tipoEspecialidad = TipoEspecialidad::find($request->id_tipo_especialidad);
-        $rangoRequest = [
-            'especialidad_id'=> request()->especialidad_id,
-            'especialidad_type'=> $tipoEspecialidad->modelo,
-            'servicio_id'=> request()->servicio_id
-        ];
-        $rango = TarifaHonorarioTurno::updateOrCreate([
-            'especialidad_id' => $request->especialidad_id, 
-            'especialidad_type'=> $tipoEspecialidad->modelo,
-            'servicio_id'=> request()->servicio_id
-        ], $rangoRequest);
-        $valorRequest = [
-            'tarifa_id'=> $rango->id,
-            'diurno'=> request()->diurno,
-            'extra'=> request()->extra,
-            'festivo'=> request()->festivo
-        ];
-        $valor = TarifaHonorarioTurnoValor::create($valorRequest);
+        // $tipoEspecialidad = TipoEspecialidad::find($request->id_tipo_especialidad);
+        // $rangoRequest = [
+        //     'especialidad_id'=> request()->especialidad_id,
+        //     'especialidad_type'=> $tipoEspecialidad->modelo,
+        //     'servicio_id'=> request()->servicio_id
+        // ];
+        // $rango = TarifaHonorarioTurno::updateOrCreate([
+        //     'especialidad_id' => $request->especialidad_id, 
+        //     'especialidad_type'=> $tipoEspecialidad->modelo,
+        //     'servicio_id'=> request()->servicio_id
+        // ], $rangoRequest);
+        // $valorRequest = [
+        //     'tarifa_id'=> $rango->id,
+        //     'diurno'=> request()->diurno,
+        //     'extra'=> request()->extra,
+        //     'festivo'=> request()->festivo
+        // ];
+        // dd($request->all());
+        $valor = TarifaHonorarioTurno::create($request->except('_token'));
         if($valor){
             return redirect('/tarifaHonorarioTurno/')->with('message', "Se han actualizado los datos");
         }else{

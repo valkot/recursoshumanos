@@ -146,7 +146,7 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
+    'sidebar_collapse' => true,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -252,19 +252,30 @@ return [
                     'icon'    => 'fas fa-fw fa-user',
                 ],
                 [
-                    'text' => 'Tarifa Honorario Turno',
+                    'text' => 'Tipos de Contrato',
+                    'url'  => 'tipoContrato',
+                    'icon'    => 'fas fa-fw fa-book',
+                    'can'  => 'superAdmin',
+                ],
+                [
+                    'text' => 'Tarifa H. Turno',
                     'url'  => 'tarifaHonorarioTurno',
+                    'icon'    => 'fas fa-fw fa-dollar-sign',
+                ],
+                [
+                    'text' => 'Tarifa H. Mano Alzada',
+                    'url'  => 'tarifaHonorarioSumaAlzada',
+                    'icon'    => 'fas fa-fw fa-dollar-sign',
+                ],
+                [
+                    'text' => 'Tarifa P. Chile Crece',
+                    'url'  => 'tarifaProgramaChileCrece',
                     'icon'    => 'fas fa-fw fa-dollar-sign',
                 ],
                 [
                     'text' => 'Tarifa por Prestaciones',
                     'url'  => 'prestacion',
                     'icon'    => 'fas fa-fw fa-dollar-sign',
-                ],
-                [
-                    'text' => 'Tipos de Contrato',
-                    'url'  => 'tipoContrato',
-                    'icon'    => 'fas fa-fw fa-book',
                 ],
             ],
         ],

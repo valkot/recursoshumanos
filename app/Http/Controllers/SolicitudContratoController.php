@@ -14,8 +14,11 @@ use App\EspecialidadMedica;
 use App\EspecialidadOdontologica;
 use App\TipoContrato;
 use App\ContratoHonorarioTurno;
+use App\TarifaHonorarioTurno;
 use App\ContratoHonorarioSumaAlzada;
+use App\TarifaHonorarioSumaAlzada;
 use App\ContratoProgramaChileCrece;
+use App\TarifaProgramaChileCrece;
 use App\ContratoProgramaQuinientosEspecialista;
 use App\ContratoProgramaTresTresMilHorasPrestacion;
 use App\PrestacionFuncionario;
@@ -92,8 +95,11 @@ class SolicitudContratoController extends Controller
         $especialidadesMedicas = EspecialidadMedica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $especialidadesOdontologicas = EspecialidadOdontologica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $tiposContratos = TipoContrato::orderBy('nombre')->get();
+        $tarifasHonorarioTurno = TarifaHonorarioTurno::get();
+        $tarifasHonorarioSumaAlzada = TarifaHonorarioSumaAlzada::get();
+        $tarifasProgramaChileCrece = TarifaProgramaChileCrece::get();
         $prestaciones = PrestacionFuncionario::get();
-        return view('solicitudContrato.create', compact('sexos', 'comunas', 'servicios', 'titulosProfesionales', 'especialidadesMedicas', 'especialidadesOdontologicas', 'tiposContratos', 'prestaciones'));
+        return view('solicitudContrato.create', compact('sexos', 'comunas', 'servicios', 'titulosProfesionales', 'especialidadesMedicas', 'especialidadesOdontologicas', 'tiposContratos', 'tarifasHonorarioTurno', 'tarifasHonorarioSumaAlzada', 'tarifasProgramaChileCrece', 'prestaciones'));
     }
 
     /**
@@ -105,9 +111,11 @@ class SolicitudContratoController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        $rutDV = explode("-", $request->rut);
         $funcionarioRequest = [
-            'rut'=> request()->rut,
-            'tx_nombre'=> request()->tx_nombre,
+            'nr_run'=> $rutDV[0],
+            'tx_digito_verificador'=> $rutDV[1],
+            'tx_nombres'=> request()->tx_nombres,
             'tx_apellido_paterno'=> request()->tx_apellido_paterno,
             'tx_apellido_materno'=> request()->tx_apellido_materno,
             'id_sexo'=> request()->id_sexo,
@@ -143,9 +151,9 @@ class SolicitudContratoController extends Controller
 
             case 3:
                 $ContratoRequest = [
-                    'numero_hora_hsa'=> request()->numero_hora_hsa,
-                    'valor_mensual_hsa'=> request()->valor_mensual_hsa,
-                    'dias_ausentados_hsa'=> request()->dias_ausentados_hsa
+                    'numero_hora_pcc'=> request()->numero_hora_pcc,
+                    'valor_mensual_pcc'=> request()->valor_mensual_pcc,
+                    'dias_ausentados_pcc'=> request()->dias_ausentados_pcc
                 ];
                 $subContrato = ContratoProgramaChileCrece::updateOrCreate(['id' => $request->id_contrato], $ContratoRequest);
                 break;
@@ -273,8 +281,11 @@ class SolicitudContratoController extends Controller
         $especialidadesMedicas = EspecialidadMedica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $especialidadesOdontologicas = EspecialidadOdontologica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
         $tiposContratos = TipoContrato::orderBy('nombre')->get();
+        $tarifasHonorarioTurno = TarifaHonorarioTurno::get();
+        $tarifasHonorarioSumaAlzada = TarifaHonorarioSumaAlzada::get();
+        $tarifasProgramaChileCrece = TarifaProgramaChileCrece::get();
         $prestaciones = PrestacionFuncionario::get();
-        return view('solicitudContrato.create', compact('solicitudContrato', 'sexos', 'comunas', 'servicios', 'titulosProfesionales', 'especialidadesMedicas', 'especialidadesOdontologicas', 'tiposContratos', 'prestaciones'));
+        return view('solicitudContrato.create', compact('solicitudContrato', 'sexos', 'comunas', 'servicios', 'titulosProfesionales', 'especialidadesMedicas', 'especialidadesOdontologicas', 'tiposContratos', 'tarifasHonorarioTurno', 'tarifasHonorarioSumaAlzada', 'tarifasProgramaChileCrece', 'prestaciones'));
     }
 
     /**

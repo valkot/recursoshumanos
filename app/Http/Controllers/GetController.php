@@ -44,7 +44,7 @@ class GetController extends Controller
 
         $rut = str_replace(".","",request()->rut);
         $rutDV = explode("-", $rut);
-        $data = Funcionario::where('rut', $rut)->first();
+        $data = Funcionario::where('nr_run', $rutDV[0])->first();
         if($data){
             $data = $data->toArray();
             $data['funcionario_id'] = $data['id'];

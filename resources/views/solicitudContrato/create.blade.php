@@ -23,8 +23,8 @@
                             <input type="text" class="form-control" id="rut" name="rut" onblur="getPerson($(this).val());" value="{{$solicitudContrato->funcionario->rut ?? ''}}" required>
                         </div>
                         <div class="col-sm-3">
-                            <label for="tx_nombre">Nombre<span style="color:#FF0000";>*</span></label>
-                            <input type="text" class="form-control" id="tx_nombre" name="tx_nombre" value="{{$solicitudContrato->funcionario->tx_nombre ?? ''}}" required>
+                            <label for="tx_nombres">Nombre<span style="color:#FF0000";>*</span></label>
+                            <input type="text" class="form-control" id="tx_nombres" name="tx_nombres" value="{{$solicitudContrato->funcionario->tx_nombres ?? ''}}" required>
                         </div>
                         <div class="col-sm-3">
                             <label for="tx_apellido_paterno">A. Paterno<span style="color:#FF0000";>*</span></label>
@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label for="servicio_id">Servicio<span style="color:#FF0000";>*</span></label>
-                            <select class="form-control" id="servicio_id" name="servicio_id" onclick="asignarValor();" {{Auth::user()->perfil_id == 4 ? 'disabled' : ''}} required>
+                            <select class="form-control" id="servicio_id" name="servicio_id" {{Auth::user()->perfil_id == 4 ? 'disabled' : ''}} required>
                                 <option value="">Seleccione Servicio</option>
                                 @foreach ($servicios as $servicio)
                                     <option value={{$servicio->id}} {{(isset($solicitudContrato) && $solicitudContrato->servicio_id == $servicio->id) || (Auth::user()->perfil_id == 4 && Auth::user()->servicio_id == $servicio->id) ? "selected" : ""}}>{{$servicio->tx_descripcion}}</option>								
@@ -141,6 +141,7 @@
             </div>
             @include('tipoContrato.honorarioTurno.formulario')
             @include('tipoContrato.honorarioSumaAlzada.formulario')
+            @include('tipoContrato.programaChileCrece.formulario')
             @include('tipoContrato.programaQuinientosEspecialista.formulario')
             @include('tipoContrato.programaTresTresMilHoras.formulario')
             <div class="card-footer text-right">
@@ -167,7 +168,7 @@
                     }else{
                         $("#funcionario_id").val(data.funcionario_id);
                         $("#rut").val(data.rut);
-                        $("#tx_nombre").val(data.tx_nombre);
+                        $("#tx_nombres").val(data.tx_nombres);
                         $("#tx_apellido_paterno").val(data.tx_apellido_paterno);
                         $("#tx_apellido_materno").val(data.tx_apellido_materno);
                         $("#id_sexo").val(data.id_sexo);
@@ -201,9 +202,6 @@
         function idEspecialidad(especialidad_id, id_tipo_especialidad, edit){
             $("#id_tipo_especialidad").val(id_tipo_especialidad);
             $("#especialidad_id").val(especialidad_id);
-            if(edit != 1){
-                asignarValor();
-            }
         }
 
         function tipoContrato(bo){
@@ -211,6 +209,8 @@
             honorarioTurno.style.display = "none";
             var honorarioSumaAlzada = document.getElementById("honorarioSumaAlzada");
             honorarioSumaAlzada.style.display = "none";
+            var programaChileCrece = document.getElementById("programaChileCrece");
+            programaChileCrece.style.display = "none";
             var programaQuinientosEspecialista = document.getElementById("programaQuinientosEspecialista");
             programaQuinientosEspecialista.style.display = "none";
             var programaTresTresMilHoras = document.getElementById("programaTresTresMilHoras");
@@ -225,6 +225,10 @@
             $("#numero_hora_hsa").css('display','').attr('required', false);
             $("#valor_mensual_hsa").css('display','').attr('disabled', true);
             $("#valor_mensual_hsa").css('display','').attr('required', false);
+            $("#numero_hora_pcc").css('display','').attr('disabled', true);
+            $("#numero_hora_pcc").css('display','').attr('required', false);
+            $("#valor_mensual_pcc").css('display','').attr('disabled', true);
+            $("#valor_mensual_pcc").css('display','').attr('required', false);
             if(bo == 1){
                 honorarioTurno.style.display = "block";
                 $("#numero_hora_diurno_ht").css('display','').attr('disabled', false);
@@ -234,12 +238,19 @@
                 $("#valor_mensual_diurno_ht").css('display','').attr('disabled', false);
                 $("#valor_mensual_diurno_ht").css('display','').attr('required', true);
             }
-            if(bo == 2 || bo == 3){
+            if(bo == 2){
                 honorarioSumaAlzada.style.display = "block";
                 $("#numero_hora_hsa").css('display','').attr('disabled', false);
                 $("#numero_hora_hsa").css('display','').attr('required', true);
                 $("#valor_mensual_hsa").css('display','').attr('disabled', false);
                 $("#valor_mensual_hsa").css('display','').attr('required', true);
+            }
+            if(bo == 3){
+                programaChileCrece.style.display = "block";
+                $("#numero_hora_pcc").css('display','').attr('disabled', false);
+                $("#numero_hora_pcc").css('display','').attr('required', true);
+                $("#valor_mensual_pcc").css('display','').attr('disabled', false);
+                $("#valor_mensual_pcc").css('display','').attr('required', true);
             }
             if(bo == 4){
                 programaQuinientosEspecialista.style.display = "block";
@@ -265,68 +276,52 @@
         tipoContrato();
 
         // Honorario Turno
-        function asignarValor() {
-            var servicio_id = document.getElementById("servicio_id").value;
-            var especialidad_id = document.getElementById("especialidad_id").value;
-            var id_tipo_especialidad = document.getElementById("id_tipo_especialidad").value;
-            $.getJSON("{{action('GetController@getValor')}}?especialidad_id="+especialidad_id+"&id_tipo_especialidad="+id_tipo_especialidad+"&servicio_id="+servicio_id,
-                function(data){
-                    if(data != 0){
-                        $("#valor_hora_diurno_ht").val(data.diurno);
-                        $("#valor_hora_extra_ht").val(data.extra);
-                        $("#valor_hora_festivo_ht").val(data.festivo);
-                    }else{
-                        $("#valor_hora_diurno_ht").val(null);
-                        $("#valor_hora_extra_ht").val(null);
-                        $("#valor_hora_festivo_ht").val(null);
-                    }
-                }
-            )
-        }
+        function valorHonorarioTurno() {
+            var tarifa_ht = document.getElementById("tarifa_ht").value;
+            $("#valor_hora_diurno_ht").val(tarifa_ht);
 
-        function valorMensualDiurnoHt(){
             var numero_hora_diurno_ht = document.getElementById("numero_hora_diurno_ht").value;
             var valor_hora_diurno_ht = document.getElementById("valor_hora_diurno_ht").value;
             $("#valor_mensual_diurno_ht").val(numero_hora_diurno_ht*valor_hora_diurno_ht);
-            valorTotalHt();
-        }
 
-        function valorMensualExtraHt(){
             var numero_hora_extra_ht = document.getElementById("numero_hora_extra_ht").value;
             var valor_hora_extra_ht = document.getElementById("valor_hora_extra_ht").value;
             $("#valor_mensual_extra_ht").val(numero_hora_extra_ht*valor_hora_extra_ht);
-            valorTotalHt();
-        }
 
-        function valorMensualFestivoHt(){
             var numero_hora_festivo_ht = document.getElementById("numero_hora_festivo_ht").value;
             var valor_hora_festivo_ht = document.getElementById("valor_hora_festivo_ht").value;
             $("#valor_mensual_festivo_ht").val(numero_hora_festivo_ht*valor_hora_festivo_ht);
-            valorTotalHt();
-        }
 
-        function valorTotalHt(){
             var valor_mensual_diurno_ht = document.getElementById("valor_mensual_diurno_ht").value;
             var valor_mensual_extra_ht = document.getElementById("valor_mensual_extra_ht").value;
             var valor_mensual_festivo_ht = document.getElementById("valor_mensual_festivo_ht").value;
             $("#valor_total_ht").val(Number(valor_mensual_diurno_ht)+Number(valor_mensual_extra_ht)+Number(valor_mensual_festivo_ht));
-            totalPagarHt();
-        }
 
-        function totalPagarHt(){
             var dias_ausentados_ht = document.getElementById("dias_ausentados_ht").value;
             var valor_mensual_diurno_ht = document.getElementById("valor_mensual_diurno_ht").value;
             var valor_mensual_extra_ht = document.getElementById("valor_mensual_extra_ht").value;
             var valor_mensual_festivo_ht = document.getElementById("valor_mensual_festivo_ht").value;
             $("#total_pagar_ht").val(((Number(valor_mensual_diurno_ht)/30)*(30-Number(dias_ausentados_ht)))+Number(valor_mensual_extra_ht)+Number(valor_mensual_festivo_ht));
         }
+        valorHonorarioTurno();
 
         // Honorario Suma Alzada
-        function totalPagarHsa(){
+        function valorHonorarioSumaAlzada(){
+            var valor_mensual_hsa = document.getElementById("tipo_honorario_hsa").value;
+            $("#valor_mensual_hsa").val(valor_mensual_hsa);
             var dias_ausentados_hsa = document.getElementById("dias_ausentados_hsa").value;
-            var valor_mensual_hsa = document.getElementById("valor_mensual_hsa").value;
             $("#total_pagar_hsa").val(((Number(valor_mensual_hsa)/30)*(30-Number(dias_ausentados_hsa))));
         }
+        valorHonorarioSumaAlzada();
+
+        // Programa Chile Crece
+        function valorProgramaChileCrece(){
+            var valor_mensual_pcc = document.getElementById("tipo_honorario_pcc").value;
+            $("#valor_mensual_pcc").val(valor_mensual_pcc);
+            var dias_ausentados_pcc = document.getElementById("dias_ausentados_pcc").value;
+            $("#total_pagar_pcc").val(((Number(valor_mensual_pcc)/30)*(30-Number(dias_ausentados_pcc))));
+        }
+        valorProgramaChileCrece();
 
         // Programa 500 Especialista
         function valorPrestacionPqe(){

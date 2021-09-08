@@ -107,6 +107,7 @@ class FonasaApi implements PatientProvider
 
     protected function normalizePacienteFonasa($fonasaResponse)
     {
+        // dd($fonasaResponse);
         if(!is_array($fonasaResponse)){
             $data = [
                 "api_fonasa" => false
@@ -125,6 +126,8 @@ class FonasaApi implements PatientProvider
             "direccion" => null,
             "nombre_completo" => null,
             "comuna" => null,
+            "cdgNacionalidad" => null,
+            "desNacionalidad" => null,
             "fecha_nacimiento" => null,
             "encontrado" => false,
             "api_fonasa" => true
@@ -154,6 +157,8 @@ class FonasaApi implements PatientProvider
                     "id_prevision" => $cert['cdgIsapre'] != " " ? 2 : 1,
                     "tramo" => $cert["afiliadoTO"]["tramo"],
                     "id_clasificacion_fonasa" => $clasificacion === 0 ? null : $clasificacion,
+                    "cdgNacionalidad" => $beneficiario["cdgNacionalidad"],
+                    "desNacionalidad" => $beneficiario["desNacionalidad"],
                     "tx_direccion" => $beneficiario['direccion'],
                     "nombre_completo" => "{$beneficiario['nombres']} {$beneficiario['apell1']} {$beneficiario['apell2']}",
                     "comuna" => "{$beneficiario['desComuna']}",

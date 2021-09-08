@@ -66,8 +66,8 @@
             </tr>
             <tr>
                 <td style="background: {{$solicitudContrato->estado->color}}">{{$solicitudContrato->estado->nombre}}</td>
-                <td>{{$solicitudContrato->usuario->name}}</td>
-                <td>{{$solicitudContrato->gestor->name ?? ''}}</td>
+                <td>{{$solicitudContrato->usuario->nombre}}</td>
+                <td>{{$solicitudContrato->gestor->nombre ?? ''}}</td>
             </tr>
         </table>
     </body>

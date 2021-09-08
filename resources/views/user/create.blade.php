@@ -2,6 +2,8 @@
 
 @section('title', 'Usuario')
 
+@include('alert.notificacion')
+
 @section('content')
     <br>
     <div class="card">
@@ -19,8 +21,8 @@
                             <input type="text" class="form-control" id="rut" name="rut" value="{{$user->rut ?? ''}}" onblur="getPerson($(this).val());" required>
                         </div>
                         <div class="col-sm-4">
-                            <label for="name">Nombre<span style="color:#FF0000";>*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{$user->name ?? ''}}" required>
+                            <label for="nombre">Nombre<span style="color:#FF0000";>*</span></label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" value="{{$user->nombre ?? ''}}" required>
                         </div>
                         <div class="col-sm-4">
                             <label for="email">Email</label>
@@ -70,6 +72,8 @@
 
 @section('js')
     <script>
+        @include('alert.script')
+
         function getPerson(rut){
             $.getJSON("{{action('GetController@getDatosRut')}}?rut="+rut,
                 function(data){
@@ -93,7 +97,7 @@
                             $("#rut").val(null);
                         }else{
                             $("#rut").val(data.rut);
-                            $("#name").val(data.tx_nombre+' '+data.tx_apellido_paterno+' '+data.tx_apellido_materno);
+                            $("#nombre").val(data.tx_nombre+' '+data.tx_apellido_paterno+' '+data.tx_apellido_materno);
                         }
                     }
                 }

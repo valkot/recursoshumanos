@@ -96,4 +96,9 @@ class UserPolicy
     {
         return Auth::user()->admin == 1 ? true : false;
     }
+
+    public function superAdmin(User $user)
+    {
+        return Auth::user()->perfil_id == 1 ? true : false;
+    }
 }

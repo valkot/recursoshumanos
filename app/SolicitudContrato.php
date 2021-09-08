@@ -55,12 +55,12 @@ class SolicitudContrato extends Model
 
 	public function usuario()
     {
-		return $this->belongsTo('App\User', 'usuario_id');
+		return $this->belongsTo('App\User', 'usuario_id')->withTrashed();
     }
 
 	public function gestor()
     {
-		return $this->belongsTo('App\User', 'gestor_id');
+		return $this->belongsTo('App\User', 'gestor_id')->withTrashed();
     }
 
     public function servicio()

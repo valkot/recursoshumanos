@@ -1,11 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'Valores del Especialista')
+@section('title', 'Valores de Chile Crece Contigo')
 
 @section('content')
     <br>
     <div class="card">
-        <form role="form" class="form-horizontal" id="form" method="POST" action="{{action('TarifaHonorarioTurnoController@store')}}">
+        <form role="form" class="form-horizontal" id="form" method="POST" action="{{action('TarifaProgramaChileCreceController@store')}}">
             {{ csrf_field() }}
             <input type="hidden" id="id" name="id" value="{{$tarifa->id ?? ''}}"/>
             <div class="card-header">
