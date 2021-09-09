@@ -46,12 +46,13 @@ class SolicitudContratoController extends Controller
         // dd($request->all());
         if (isset($request->rut)) {
             $rut = str_replace(".","",request()->rut);
-            $id_funcionarios_rut = Funcionario::whereRaw("rut LIKE ?", ['%'.$rut.'%'])->pluck('id')->toArray();
+            $rut = explode("-", $rut);
+            $id_funcionarios_rut = Funcionario::whereRaw("nr_run LIKE ?", ['%'.$rut[0].'%'])->pluck('id')->toArray();
         }else{
             $id_funcionarios_rut = null;
         }
         if (isset($request->nombre)) {
-            $id_funcionarios_nombre = Funcionario::whereRaw("CONCAT(tx_nombre,' ',tx_apellido_paterno,' ',tx_apellido_materno) LIKE ?", ['%'.$request->nombre.'%'])->pluck('id')->toArray();
+            $id_funcionarios_nombre = Funcionario::whereRaw("CONCAT(tx_nombres,' ',tx_apellido_paterno,' ',tx_apellido_materno) LIKE ?", ['%'.$request->nombre.'%'])->pluck('id')->toArray();
         }else{
             $id_funcionarios_nombre = null;
         }
