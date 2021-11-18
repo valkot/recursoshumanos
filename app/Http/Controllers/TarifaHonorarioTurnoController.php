@@ -20,9 +20,9 @@ class TarifaHonorarioTurnoController extends Controller
      */
     public function index(Request $request)
     {
-        $tarifas = TarifaHonorarioTurno::paginate(10);
+        $tarifasHT = TarifaHonorarioTurno::paginate(10);
         // dd($tarifas);
-        return view('tipoContrato.honorarioTurno.tarifa.index', compact('tarifas'));
+        return view('tipoContrato.honorarioTurno.tarifa.index', compact('tarifasHT'));
     }
 
     /**

@@ -32,10 +32,19 @@ Route::get('/user/restaurar/{id}', 'UserController@restaurar');
 Route::resource('/tipoContrato', 'TipoContratoController');
 Route::get('/tipoContratoActivar/{id}', 'TipoContratoController@activar');
 
+Route::get('tipoTarifas/{anio}', 'TipoTarifasController@fetchAnioTarifas');
+Route::resource('/tipoTarifas', 'TipoTarifasController')->only(['index']);
+
+Route::get('/tarifaHonorarioTurno/{id}/edit', 'TarifaHonorarioTurnoController@edit');
+Route::get('/tarifaHonorarioTurno/{id}', 'TarifaHonorarioTurnoController@destroy');
 Route::resource('/tarifaHonorarioTurno', 'TarifaHonorarioTurnoController');
 
+Route::get('/tarifaHonorarioSumaAlzada/{}/edit/', 'TarifaHonorarioSumaAlzadaController@edit');
+Route::get('/tarifaHonorarioSumaAlzada/{id}', 'TarifaHonorarioSumaAlzadaController@destroy');
 Route::resource('/tarifaHonorarioSumaAlzada', 'TarifaHonorarioSumaAlzadaController');
 
+Route::get('/tarifaProgramaChileCrece/{}/edit/', 'TarifaProgramaChileCreceController@edit');
+Route::get('/tarifaProgramaChileCrece/{id}', 'TarifaProgramaChileCreceController@destroy');
 Route::resource('/tarifaProgramaChileCrece', 'TarifaProgramaChileCreceController');
 
 Route::resource('/prestacion', 'PrestacionFuncionarioController');

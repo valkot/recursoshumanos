@@ -14,8 +14,8 @@ class TarifaProgramaChileCreceController extends Controller
      */
     public function index(Request $request)
     {
-        $tarifas = TarifaProgramaChileCrece::paginate(10);
-        return view('tipoContrato.programaChileCrece.tarifa.index', compact('tarifas'));
+        $tarifasPCC = TarifaProgramaChileCrece::paginate(10);
+        return view('tipoContrato.programaChileCrece.tarifa.index', compact('tarifasPCC'));
     }
 
     /**

@@ -14,8 +14,8 @@ class TarifaHonorarioSumaAlzadaController extends Controller
      */
     public function index(Request $request)
     {
-        $tarifas = TarifaHonorarioSumaAlzada::paginate(10);
-        return view('tipoContrato.honorarioSumaAlzada.tarifa.index', compact('tarifas'));
+        $tarifasHSA = TarifaHonorarioSumaAlzada::paginate(10);
+        return view('tipoContrato.honorarioSumaAlzada.tarifa.index', compact('tarifasHSA'));
     }
 
     /**
