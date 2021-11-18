@@ -131,7 +131,7 @@
         function setFiltroAnio(anio){
             $.ajax({
                 type: "Get",
-                url: "{{ url('/tipoTarifas') }}" + $(anio).val(),
+                url: "{{ url('/tipoTarifas') }}/" + $(anio).val(),
                 success: function (data) {
                     
                     dataTableHSA.clear();
