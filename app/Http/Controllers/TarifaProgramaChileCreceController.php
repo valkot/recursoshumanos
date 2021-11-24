@@ -36,12 +36,23 @@ class TarifaProgramaChileCreceController extends Controller
      */
     public function store(Request $request)
     {
-        $valor = TarifaProgramaChileCrece::create($request->except('_token'));
-        if($valor){
-            return redirect('/tarifaProgramaChileCrece/')->with('message', "Se han actualizado los datos");
+        $existe = TarifaProgramaChileCrece::find($request->id);
+        $datos = [
+            'nombre'=> request()->nombre,
+            'valor'=> request()->valor,
+            'anio'=> request()->anio
+        ];
+        
+        $tarifa = TarifaProgramaChileCrece::updateOrCreate(['id'=> $request->id], $datos);
+        
+        if($tarifa && $existe){
+            return redirect('/tipoTarifas/')->with('message', "Se han actualizado los datos correctamente");
+        }elseif($tarifa){
+            return redirect('/tipoTarifas/')->with('message', "Se ha creado la tarifa correctamente");
         }else{
-            return redirect('/tarifaProgramaChileCrece/')->with('error', "No se han actualizado los datos");
+            return redirect('/tipoTarifas/')->with('error', "No se han podido guardar los datos");
         }
+        
     }
 
     /**
@@ -61,9 +72,10 @@ class TarifaProgramaChileCreceController extends Controller
      * @param  \App\TarifaProgramaChileCrece  $tarifaProgramaChileCrece
      * @return \Illuminate\Http\Response
      */
-    public function edit(TarifaProgramaChileCrece $tarifaProgramaChileCrece)
+    public function edit($id)
     {
-        //
+        $tarifasPCC = TarifaProgramaChileCrece::find($id);
+        return view('tipoContrato.programaChileCrece.tarifa.create', compact('tarifasPCC'));
     }
 
     /**
@@ -84,8 +96,13 @@ class TarifaProgramaChileCreceController extends Controller
      * @param  \App\TarifaProgramaChileCrece  $tarifaProgramaChileCrece
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TarifaProgramaChileCrece $tarifaProgramaChileCrece)
+    public function destroy($id)
     {
-        //
+        $tarifa = TarifaProgramaChileCrece::find($id)->delete();
+        if($tarifa){
+            return redirect('/tipoTarifas')->with('message', "La tarifa se ha eliminado correctamente");
+        }else{
+            return redirect('/tipoTarifas')->with('error', "No se ha podido eliminar la tarifa");
+        }
     }
 }

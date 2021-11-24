@@ -4,6 +4,14 @@
 
 @include('alert.notificacion')
 
+@section('CSS')
+    <style>
+        table.dataTable.display tbody tr.odd {
+            font-size: 12px;
+        }
+    </style>
+@endsection
+
 @section('content')
     <br>
 	<div class="card card-info">
@@ -92,12 +100,12 @@
         }
 
         const dataTableHSA = $('#table_HSA').DataTable({
-            "columnDefs": [ 
-                { "targets": 0, "title": "ID", "data": "id" },
-                { "targets": 1, "title": "Nombre", "data": "nombre" },
-                { "targets": 2, "title": "Valor", "data": "valor" },
-                { "targets": 3, "title": "Año", "data": "anio" },
-                { "targets": 4, "title": '<i class="fa fa-cog"></i>', "data": "botones" } 
+            "columns": [ 
+                { "title": "ID", "data": "id" },
+                { "title": "Nombre", "data": "nombre" },
+                { "title": "Valor", "data": "valor" },
+                { "title": "Año", "data": "anio" },
+                { "title": '<i class="fa fa-cog"></i>', "data": "botones" } 
             ],
             language: {"url": "{{url('/')}}/js/datatables/spanish.json"},
         });
@@ -125,6 +133,13 @@
         });
 
         const dataTableP = $('#table_P').DataTable({
+            "columns": [
+                { "title": "ID", "data": "id" },
+                { "title": "Nombre", "data": "tx_nombre" },
+                { "title": "Valor", "data": "valor" },
+                { "title": "Año", "data": "anio" },
+                { "targets": 4, "title": '<i class="fa fa-cog"></i>', "data": "botones" }
+            ],
             language: {"url": "{{url('/')}}/js/datatables/spanish.json"},
         });
 
@@ -146,6 +161,10 @@
                     dataTablePCC.rows.add(data.tarifasPCC).draw()
                     dataTablePCC.draw();
 
+                    dataTableP.clear();
+                    dataTableP.rows.add(data.prestaciones).draw()
+                    dataTableP.draw();
+
                 },
                 error: function (response) {
                     console.log(response.responseText);
@@ -153,9 +172,14 @@
             });
         }
 
-        // $('.dataTable').DataTable({
-        //     language: {"url": "{{url('/')}}/js/datatables/spanish.json"},
-        // });
+
+        $(".alert-success").fadeTo(20000, 500).slideUp(500, function(){
+            $(".alert-success").slideUp(1000);
+        });
+
+        $(".alert-danger").fadeTo(20000, 5000).slideUp(500, function(){
+            $(".alert-danger").slideUp(1000);
+        });
 
     </script>
 @stop

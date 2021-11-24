@@ -20,8 +20,7 @@ class TarifaHonorarioTurnoController extends Controller
      */
     public function index(Request $request)
     {
-        $tarifasHT = TarifaHonorarioTurno::paginate(10);
-        // dd($tarifas);
+        $tarifasHT = TarifaHonorarioTurno::get();
         return view('tipoContrato.honorarioTurno.tarifa.index', compact('tarifasHT'));
     }
 
@@ -32,11 +31,7 @@ class TarifaHonorarioTurnoController extends Controller
      */
     public function create()
     {
-        $servicios = Servicio::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
-        $titulosProfesionales = TituloProfesional::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
-        $especialidadesMedicas = EspecialidadMedica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
-        $especialidadesOdontologicas = EspecialidadOdontologica::where("bo_estado", 1)->orderBy('tx_descripcion')->get();
-        return view('tipoContrato.honorarioTurno.tarifa.create', compact('servicios', 'titulosProfesionales', 'especialidadesMedicas', 'especialidadesOdontologicas'));
+        return view('tipoContrato.honorarioTurno.tarifa.create');
     }
 
     /**
@@ -47,29 +42,21 @@ class TarifaHonorarioTurnoController extends Controller
      */
     public function store(Request $request)
     {
-        // $tipoEspecialidad = TipoEspecialidad::find($request->id_tipo_especialidad);
-        // $rangoRequest = [
-        //     'especialidad_id'=> request()->especialidad_id,
-        //     'especialidad_type'=> $tipoEspecialidad->modelo,
-        //     'servicio_id'=> request()->servicio_id
-        // ];
-        // $rango = TarifaHonorarioTurno::updateOrCreate([
-        //     'especialidad_id' => $request->especialidad_id, 
-        //     'especialidad_type'=> $tipoEspecialidad->modelo,
-        //     'servicio_id'=> request()->servicio_id
-        // ], $rangoRequest);
-        // $valorRequest = [
-        //     'tarifa_id'=> $rango->id,
-        //     'diurno'=> request()->diurno,
-        //     'extra'=> request()->extra,
-        //     'festivo'=> request()->festivo
-        // ];
-        // dd($request->all());
-        $valor = TarifaHonorarioTurno::create($request->except('_token'));
-        if($valor){
-            return redirect('/tarifaHonorarioTurno/')->with('message', "Se han actualizado los datos");
+        $existe = TarifaHonorarioTurno::find($request->id);
+        $datos = [
+            'nombre'=> request()->nombre,
+            'valor'=> request()->valor,
+            'anio'=> request()->anio
+        ];
+        
+        $tarifa = TarifaHonorarioTurno::updateOrCreate(['id'=> $request->id], $datos);
+        
+        if($tarifa && $existe){
+            return redirect('/tipoTarifas/')->with('message', "Se han actualizado los datos correctamente");
+        }elseif($tarifa){
+            return redirect('/tipoTarifas/')->with('message', "Se ha creado la tarifa correctamente");
         }else{
-            return redirect('/tarifaHonorarioTurno/')->with('error', "No se han actualizado los datos");
+            return redirect('/tipoTarifas/')->with('error', "No se han podido guardar los datos");
         }
     }
 
@@ -90,9 +77,10 @@ class TarifaHonorarioTurnoController extends Controller
      * @param  \App\TarifaHonorarioTurno  $tarifaHonorarioTurno
      * @return \Illuminate\Http\Response
      */
-    public function edit(TarifaHonorarioTurno $tarifaHonorarioTurno)
+    public function edit($id)
     {
-        //
+        $tarifasHT = TarifaHonorarioTurno::find($id);
+        return view('tipoContrato.honorarioTurno.tarifa.create', compact('tarifasHT'));
     }
 
     /**
@@ -113,8 +101,15 @@ class TarifaHonorarioTurnoController extends Controller
      * @param  \App\TarifaHonorarioTurno  $tarifaHonorarioTurno
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TarifaHonorarioTurno $tarifaHonorarioTurno)
+    public function destroy($id)
     {
-        //
+        $tarifa = TarifaHonorarioTurno::find($id)->delete();
+
+        if($tarifa){
+            return redirect('/tipoTarifas')->with('message', "La tarifa se ha eliminado correctamente");
+        }else{
+            return redirect('/tipoTarifas')->with('error', "No se ha podido eliminar la tarifa");
+        }
+        
     }
 }

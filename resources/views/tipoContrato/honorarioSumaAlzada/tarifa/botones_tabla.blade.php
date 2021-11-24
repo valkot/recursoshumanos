@@ -1,4 +1,4 @@
-<div class='btn-group'>
+<div class='btn-group' style="line-height: 0">
     <a href={{url("tarifaHonorarioSumaAlzada/$id/edit")}} title='Editar' class='btn btn-warning btn-xs'><i class='fa fa-edit' style='color:white'></i></a>
     <form action='{{ route('tarifaHonorarioSumaAlzada.destroy', $id) }}' method='POST'>
         @csrf

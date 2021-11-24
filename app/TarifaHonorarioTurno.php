@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TarifaHonorarioTurno extends Model
 {
+
+    use SoftDeletes;
+    
     protected $table = 'tarifa_honorario_turno';
     
     public $guarded = [];

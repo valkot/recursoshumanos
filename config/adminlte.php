@@ -260,28 +260,8 @@ return [
                 [
                     'text' => 'Tipos de Tarifas',
                     'url'  => 'tipoTarifas',
-                    'icon'    => 'fas fa-file-invoice-dollar',
+                    'icon'    => 'fas fa-fw fa-file-invoice-dollar',
                     'can'  => 'superAdmin',
-                ],
-                [
-                    'text' => 'Tarifa H. Turno',
-                    'url'  => 'tarifaHonorarioTurno',
-                    'icon'    => 'fas fa-fw fa-dollar-sign',
-                ],
-                [
-                    'text' => 'Tarifa H. Mano Alzada',
-                    'url'  => 'tarifaHonorarioSumaAlzada',
-                    'icon'    => 'fas fa-fw fa-dollar-sign',
-                ],
-                [
-                    'text' => 'Tarifa P. Chile Crece',
-                    'url'  => 'tarifaProgramaChileCrece',
-                    'icon'    => 'fas fa-fw fa-dollar-sign',
-                ],
-                [
-                    'text' => 'Tarifa por Prestaciones',
-                    'url'  => 'prestacion',
-                    'icon'    => 'fas fa-fw fa-dollar-sign',
                 ],
             ],
         ],

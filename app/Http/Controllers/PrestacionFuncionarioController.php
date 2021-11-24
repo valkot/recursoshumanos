@@ -40,12 +40,24 @@ class PrestacionFuncionarioController extends Controller
      */
     public function store(Request $request)
     {
-        $prestacion = PrestacionFuncionario::updateOrCreate(['id' => $request->id], $request->except('_token'));
-        if($prestacion){
-            return redirect('/prestacion')->with('message', "La prestacion se ha creado correctamente");
+
+        $existe = PrestacionFuncionario::find($request->id);
+        $datos = [
+            'tx_nombre'=> request()->tx_nombre,
+            'valor'=> request()->valor,
+            'anio'=> request()->anio
+        ];
+
+        $prestacion = PrestacionFuncionario::updateOrCreate(['id'=> $request->id], $datos);
+        
+        if($prestacion && $existe){
+            return redirect('/tipoTarifas/')->with('message', "Se han actualizado los datos correctamente");
+        }elseif($prestacion){
+            return redirect('/tipoTarifas/')->with('message', "Se ha creado la prestacion correctamente");
         }else{
-            return redirect('/prestacion')->with('error', "No se ha podido crear la prestacion");
+            return redirect('/tipoTarifas/')->with('error', "No se han actualizado los datos");
         }
+
     }
 
     /**
@@ -70,7 +82,7 @@ class PrestacionFuncionarioController extends Controller
         $prestacion = PrestacionFuncionario::find($id);
         return view('prestacion.create', compact('prestacion'));
 
-        dd($prestacion);
+        //dd($prestacion);
     }
 
     /**
@@ -91,8 +103,13 @@ class PrestacionFuncionarioController extends Controller
      * @param  \App\PrestacionFuncionario  $prestacionFuncionario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PrestacionFuncionario $prestacionFuncionario)
+    public function destroy($id)
     {
-        //
+        $prestacion = PrestacionFuncionario::find($id)->delete();
+        if($prestacion){
+            return redirect('/tipoTarifas')->with('message', "La prestacion se ha eliminado correctamente");
+        }else{
+            return redirect('/tipoTarifas')->with('error', "No se ha podido eliminar la prestacion");
+        }
     }
 }

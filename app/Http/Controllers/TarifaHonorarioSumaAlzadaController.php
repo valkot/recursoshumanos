@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TarifaHonorarioSumaAlzada;
+use Dotenv\Result\Success;
 use Illuminate\Http\Request;
 
 class TarifaHonorarioSumaAlzadaController extends Controller
@@ -36,11 +37,21 @@ class TarifaHonorarioSumaAlzadaController extends Controller
      */
     public function store(Request $request)
     {
-        $valor = TarifaHonorarioSumaAlzada::create($request->except('_token'));
-        if($valor){
-            return redirect('/tarifaHonorarioSumaAlzada/')->with('message', "Se han actualizado los datos");
+        $existe = TarifaHonorarioSumaAlzada::find($request->id);
+        $datos = [
+            'nombre'=> request()->nombre,
+            'valor'=> request()->valor,
+            'anio'=> request()->anio
+        ];
+
+        $tarifa = TarifaHonorarioSumaAlzada::updateOrCreate(['id'=> $request->id], $datos);
+        
+        if($tarifa && $existe){
+            return redirect('/tipoTarifas/')->with('message', "Se han actualizado los datos correctamente");
+        }elseif($tarifa){
+            return redirect('/tipoTarifas/')->with('message', "Se ha creado la tarifa correctamente");
         }else{
-            return redirect('/tarifaHonorarioSumaAlzada/')->with('error', "No se han actualizado los datos");
+            return redirect('/tipoTarifas/')->with('error', "No se han podido guardar los datos");
         }
     }
 
@@ -61,9 +72,10 @@ class TarifaHonorarioSumaAlzadaController extends Controller
      * @param  \App\TarifaHonorarioSumaAlzada  $tarifaHonorarioSumaAlzada
      * @return \Illuminate\Http\Response
      */
-    public function edit(TarifaHonorarioSumaAlzada $tarifaHonorarioSumaAlzada)
+    public function edit($id)
     {
-        //
+        $tarifasHSA = TarifaHonorarioSumaAlzada::find($id);
+        return view('tipoContrato.honorarioSumaAlzada.tarifa.create', compact('tarifasHSA'));
     }
 
     /**
@@ -84,8 +96,13 @@ class TarifaHonorarioSumaAlzadaController extends Controller
      * @param  \App\TarifaHonorarioSumaAlzada  $tarifaHonorarioSumaAlzada
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TarifaHonorarioSumaAlzada $tarifaHonorarioSumaAlzada)
+    public function destroy($id)
     {
-        //
+        $tarifa = TarifaHonorarioSumaAlzada::find($id)->delete();
+        if($tarifa){
+            return redirect('/tipoTarifas')->with('message', "La tarifa se ha eliminado correctamente");
+        }else{
+            return redirect('/tipoTarifas')->with('error', "No se ha podido eliminar la tarifa");
+        }
     }
 }

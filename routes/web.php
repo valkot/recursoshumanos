@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,21 +33,28 @@ Route::get('/user/restaurar/{id}', 'UserController@restaurar');
 Route::resource('/tipoContrato', 'TipoContratoController');
 Route::get('/tipoContratoActivar/{id}', 'TipoContratoController@activar');
 
-Route::get('tipoTarifas/{anio}', 'TipoTarifasController@fetchAnioTarifas');
+Route::get('/tipoTarifas/{anio}', 'TipoTarifasController@fetchAnioTarifas');
 Route::resource('/tipoTarifas', 'TipoTarifasController')->only(['index']);
 
-Route::get('/tarifaHonorarioTurno/{id}/edit', 'TarifaHonorarioTurnoController@edit');
-Route::get('/tarifaHonorarioTurno/{id}', 'TarifaHonorarioTurnoController@destroy');
-Route::resource('/tarifaHonorarioTurno', 'TarifaHonorarioTurnoController');
 
+Route::get('/tarifaHonorarioSumaAlzada/create', 'TarifaHonorarioSumaAlzadaController@create');
 Route::get('/tarifaHonorarioSumaAlzada/{}/edit/', 'TarifaHonorarioSumaAlzadaController@edit');
 Route::get('/tarifaHonorarioSumaAlzada/{id}', 'TarifaHonorarioSumaAlzadaController@destroy');
 Route::resource('/tarifaHonorarioSumaAlzada', 'TarifaHonorarioSumaAlzadaController');
 
+Route::get('/tarifaHonorarioTurno/create', 'TarifaHonorarioTurnoController@create');
+Route::get('/tarifaHonorarioTurno/{id}/edit', 'TarifaHonorarioTurnoController@edit');
+Route::get('/tarifaHonorarioTurno/{id}', 'TarifaHonorarioTurnoController@destroy');
+Route::resource('/tarifaHonorarioTurno', 'TarifaHonorarioTurnoController');
+
+Route::get('/tarifaProgramaChileCrece/create', 'TarifaProgramaChileCreceController@create');
 Route::get('/tarifaProgramaChileCrece/{}/edit/', 'TarifaProgramaChileCreceController@edit');
 Route::get('/tarifaProgramaChileCrece/{id}', 'TarifaProgramaChileCreceController@destroy');
 Route::resource('/tarifaProgramaChileCrece', 'TarifaProgramaChileCreceController');
 
+Route::get('/prestacion/create', 'PrestacionFuncionarioController@create');
+Route::get('/prestacion/{}/edit/', 'PrestacionFuncionarioController@edit');
+Route::get('/prestacion/{id}', 'PrestacionFuncionarioController@destroy');
 Route::resource('/prestacion', 'PrestacionFuncionarioController');
 
 Route::get('/getDatosRut', 'GetController@getDatosRut');

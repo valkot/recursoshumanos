@@ -15,26 +15,28 @@
                     </form>
                     <div class="table-responsive">
                         <table id="table_P" class="table table-striped table-hover dataTable">
-                            <thead style="font-size:12px">
+                            <thead>
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Valor</th>
+                                <th>Año</th>
                                 <th><i class="fa fa-cog"></i></th>
                             </thead>
                             <tbody>
                                 @foreach ($prestaciones as $prestacion)
-                                    <tr style="font-size:12px">
+                                    <tr>
                                         <td>{{$prestacion->id}}</td>
                                         <td>{{$prestacion->tx_nombre}}</td>
                                         <td>{{$prestacion->valor}}</td>
+                                        <td>{{$prestacion->anio}}</td>
                                         <td>
-                                            <div class="btn-group">
+                                            <div class="btn-group" style="line-height: 0">
                                                 <a href={{url("prestacion/".$prestacion->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
-                                                {{-- <form action="{{ route('paciente.destroy',$paciente->id) }}" method="POST">
+                                                <form action="{{ route('prestacion.destroy',$prestacion->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button onclick="return confirm('¿Esta seguro de eliminar este paciente?');" type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash" style="color:white"></i></button>
-                                                </form> --}}
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

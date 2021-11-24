@@ -2,6 +2,10 @@
 
 @section('title', 'Crear Prestacion')
 
+@section('css')
+    <link href="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+@endsection
+
 @section('content')
     <br>
     <div class="card">
@@ -22,6 +26,15 @@
                             <label for="valor">Valor<span style="color:#FF0000";>*</span></label>
                             <input type="number" class="form-control" id="valor" name="valor" value="{{$prestacion->valor ?? ''}}" required>
                         </div>
+                        <div class="col-sm-3">
+                            <label for="anio">Año<span style="color:#FF0000";>*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="anio" name="anio" autocomplete="off" value="{{$prestacion->anio ?? ''}}" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -33,7 +46,30 @@
 @stop
 
 @section('js')
-    <script>
-        $("body").addClass("sidebar-collapse");
+    <script src="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+    <script> 
+
+        @if(isset($prestacion))            
+
+        var nombre = @json($prestacion->nombre);
+        var valor = @json($prestacion->valor);
+        var anio = @json($prestacion->anio);
+
+        $("#nombre").val(nombre);
+        $("#valor").val(valor);
+        $("#anio").val(anio);
+
+        @endif
+
+        $( document ).ready(function() {
+            $("#anio").datepicker({
+                autoclose: true,
+                format: " yyyy",
+                viewMode: "years",
+                minViewMode: "years"
+            });
+        });
+
     </script>    
 @endsection

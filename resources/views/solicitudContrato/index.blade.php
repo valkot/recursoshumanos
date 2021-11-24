@@ -64,7 +64,7 @@
                         </form>
                         <div class="table-responsive">
                             <table class="table table-striped table-hover">
-                                <thead style="font-size:12px">
+                                <thead>
                                     <th>ID</th>
                                     <th>Nombre</th>
                                     <th>Rut</th>
@@ -77,7 +77,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($solicitudesContratos as $solicitudContrato)
-                                        <tr style="font-size:12px">
+                                        <tr>
                                             <td>{{$solicitudContrato->id}}</td>
                                             <td>{{$solicitudContrato->funcionario->nombre}}</td>
                                             <td>{{$solicitudContrato->funcionario->rut}}</td>

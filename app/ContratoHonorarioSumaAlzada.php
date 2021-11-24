@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContratoHonorarioSumaAlzada extends Model
 {
+
     protected $table = 'contrato_honorario_suma_alzada';
 
     public $guarded = [];

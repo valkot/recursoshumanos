@@ -21,7 +21,6 @@
 
 @section('js')
     <script>
-        $("body").addClass("sidebar-collapse");
 
         $(".alert-success").fadeTo(20000, 500).slideUp(500, function(){
             $(".alert-success").slideUp(1000);

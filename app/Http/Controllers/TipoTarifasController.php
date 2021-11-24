@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 class TipoTarifasController extends Controller
 {
+
     public function index(Request $request)
     {   
         $tarifasHSA = TarifaHonorarioSumaAlzada::get();
@@ -39,11 +40,19 @@ class TipoTarifasController extends Controller
             $tarifa['botones']=$b;
         }
 
+        $prestaciones = PrestacionFuncionario::where("anio", $anio)->get();
+        foreach ($prestaciones as $prestacion){
+            $b = view("prestacion.botones_tabla", ["id" => $prestacion->id])->render();
+            $prestacion['botones']=$b;
+        }
+
         return response()->json([
             'tarifasHSA' => $tarifasHSA,
             'tarifasHT' => $tarifasHT,
-            'tarifasPCC' => $tarifasPCC
+            'tarifasPCC' => $tarifasPCC,
+            'prestaciones' => $prestaciones
         ]);
 
     }
+
 }

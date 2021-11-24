@@ -153,7 +153,6 @@
 
 @section('js')
     <script>
-        $("body").addClass("sidebar-collapse");
 
         function guardar(){
             $("#tipo_contrato_id").css('display','').attr('disabled', false);

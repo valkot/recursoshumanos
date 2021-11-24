@@ -21,7 +21,7 @@
                     </form>
                     <div class="table-responsive">
                         <table id="table_HT" class="table table-striped table-hover dataTable">
-                            <thead style="font-size:12px">
+                            <thead >
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Valor</th>
@@ -30,13 +30,13 @@
                             </thead>
                             <tbody>
                                 @foreach ($tarifasHT as $tarifa)
-                                    <tr style="font-size:12px">
+                                    <tr >
                                         <td>{{$tarifa->id}}</td>
                                         <td>{{$tarifa->nombre}}</td>
                                         <td>{{$tarifa->valor}}</td>
                                         <td>{{$tarifa->anio}}</td>
                                         <td>
-                                            <div class="btn-group">
+                                            <div class="btn-group" style="line-height: 0">
                                                 <a href={{url("tarifaHonorarioTurno/".$tarifa->id."/edit")}} title="Editar" class="btn btn-warning btn-xs"><i class="fa fa-edit" style="color:white"></i></a>
                                                 <form action="{{ route('tarifaHonorarioTurno.destroy',$tarifa->id) }}" method="POST">
                                                     @csrf
